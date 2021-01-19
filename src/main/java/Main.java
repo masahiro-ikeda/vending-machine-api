@@ -1,11 +1,11 @@
-import controler.OrderReceiver;
+import controler.OrderController;
 
 public class Main {
 
   public static void main(String [] args) {
     System.out.println("bending machine start.");
 
-    new OrderReceiver().receive();
+    new OrderController().receive();
 
     System.out.println("bending machine finish.");
   }
