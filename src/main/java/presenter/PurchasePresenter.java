@@ -20,13 +20,17 @@ public class PurchasePresenter {
 
     // 返金するお金の枚数を表示
     changes.forEach( cash -> {
-      String message = String.format( "%4s円%3s枚", cash.getMoneyType().getValue(), cash.getCashQuantity() );
+      String message = String.format( "%s円%3s枚", cash.getMoneyType().getValue(), cash.getCashQuantity() );
       System.out.println( message );
     } );
 
     // おつりの金額計算
     int repaymentAmount = changes.stream().mapToInt( cash -> cash.getMoneyType().getValue() * cash.getCashQuantity() ).sum();
-    System.out.println( repaymentAmount + "円を返金しました。" );
+    if (repaymentAmount == 0) {
+      System.out.println( "おつりはありません。" );
+    } else {
+      System.out.println( repaymentAmount + "円のおつりです。" );
+    }
     System.out.println();
   }
 }

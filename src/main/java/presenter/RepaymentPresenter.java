@@ -15,7 +15,7 @@ public class RepaymentPresenter {
 
     // 返金するお金の枚数を表示
     changes.forEach( cash -> {
-      String message = String.format( "%4s円%3s枚", cash.getMoneyType().getValue(), cash.getCashQuantity() );
+      String message = String.format( "%s円%3s枚", cash.getMoneyType().getValue(), cash.getCashQuantity() );
       System.out.println( message );
     } );
 

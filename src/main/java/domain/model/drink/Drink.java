@@ -55,4 +55,8 @@ public class Drink {
   public int getDrinkPrice() {
     return drinkPrice;
   }
+
+  public int getDrinkStockQuantity() {
+    return drinkStockQuantity;
+  }
 }

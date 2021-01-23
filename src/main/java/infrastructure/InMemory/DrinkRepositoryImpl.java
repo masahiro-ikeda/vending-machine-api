@@ -3,6 +3,7 @@ package infrastructure.InMemory;
 import domain.model.drink.Drink;
 import repository.DrinkRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +20,24 @@ public class DrinkRepositoryImpl implements DrinkRepository {
 
   @Override
   public List<Drink> fetch() {
-    return drinks;
+    // ディープコピーを返す
+    return new ArrayList<>( drinks );
   }
 
   @Override
   public Drink fetchById(int drinkId) {
     Optional<Drink> target = drinks.stream().filter( dk -> dk.getDrinkId() == drinkId ).findFirst();
-    return target.orElse( null );
+    if (target.isPresent()) {
+      // ディープコピーを返す
+      return new Drink(
+          target.get().getDrinkId(),
+          target.get().getDrinkName(),
+          target.get().getDrinkPrice(),
+          target.get().getDrinkStockQuantity()
+      );
+    } else {
+      return null;
+    }
   }
 
   @Override

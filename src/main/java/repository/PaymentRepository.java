@@ -1,6 +1,6 @@
 package repository;
 
-import domain.model.payment.Payments;
+import domain.model.payment.PaymentHolder;
 
 /**
  * RDBではなくRedisなどの一時メモリに実装する想定.
@@ -10,17 +10,12 @@ public interface PaymentRepository {
   /**
    * 支払い記録を保存する.
    *
-   * @param payments 支払いの集約
+   * @param paymentHolder 支払いの集約
    */
-  void store(Payments payments);
+  void store(PaymentHolder paymentHolder);
 
   /**
    * 支払記録を取得.
    */
-  Payments fetch();
-
-  /**
-   * 支払い記録を解放.
-   */
-  void release();
+  PaymentHolder fetch();
 }

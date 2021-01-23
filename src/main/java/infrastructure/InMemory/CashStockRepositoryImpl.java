@@ -4,6 +4,7 @@ import domain.model.cash.Cash;
 import domain.model.cash.CashStock;
 import repository.CashStockRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class CashStockRepositoryImpl implements CashStockRepository {
 
   @Override
   public CashStock fetch() {
-    return new CashStock( cashList );
+    return new CashStock( new ArrayList<>( cashList ) );
   }
 
   @Override

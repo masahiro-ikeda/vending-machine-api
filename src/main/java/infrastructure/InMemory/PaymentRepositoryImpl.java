@@ -1,7 +1,7 @@
 package infrastructure.InMemory;
 
 import domain.model.payment.Payment;
-import domain.model.payment.Payments;
+import domain.model.payment.PaymentHolder;
 import repository.PaymentRepository;
 
 import java.util.ArrayList;
@@ -13,17 +13,13 @@ public class PaymentRepositoryImpl implements PaymentRepository {
   private static List<Payment> payments = new ArrayList<>();
 
   @Override
-  public void store(Payments payments) {
-    this.payments = payments.getPayments();
+  public void store(PaymentHolder paymentHolder) {
+    payments = paymentHolder.getPayments();
   }
 
   @Override
-  public Payments fetch() {
-    return new Payments( payments );
-  }
-
-  @Override
-  public void release() {
-    payments.clear();
+  public PaymentHolder fetch() {
+    // ディープコピーを返す
+    return new PaymentHolder( new ArrayList<>( payments ) );
   }
 }

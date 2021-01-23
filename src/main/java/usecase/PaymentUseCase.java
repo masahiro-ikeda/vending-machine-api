@@ -3,7 +3,7 @@ package usecase;
 import domain.model.cash.CashStock;
 import domain.model.drink.DrinkDisplay;
 import domain.model.payment.Payment;
-import domain.model.payment.Payments;
+import domain.model.payment.PaymentHolder;
 import domain.service.SearchSaleableDrinkService;
 import infrastructure.InMemory.CashStockRepositoryImpl;
 import infrastructure.InMemory.PaymentRepositoryImpl;
@@ -39,19 +39,19 @@ public class PaymentUseCase {
 
     // 支払い
     Payment payment = new Payment( amount );
-    Payments payments = paymentRepository.fetch();
-    payments.pay( payment );
+    PaymentHolder paymentHolder = paymentRepository.fetch();
+    paymentHolder.pay( payment );
 
     // 現金残高を増やす
     CashStock cashStock = cashStockRepository.fetch();
     cashStock.putIn( payment );
 
     // 投入金額合計で購入可能なドリンクのリストを取得
-    int totalAmount = payments.getTotalAmount();
+    int totalAmount = paymentHolder.getTotalAmount();
     List<DrinkDisplay> drinkDisplays = searchSaleableDrinkService.getDisplayDrinks( totalAmount );
 
     //永続化
-    paymentRepository.store( payments );
+    paymentRepository.store( paymentHolder );
     cashStockRepository.store( cashStock );
 
     // コンソール表示

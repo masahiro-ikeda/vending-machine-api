@@ -3,7 +3,7 @@ package usecase;
 import domain.model.cash.Cash;
 import domain.model.cash.CashStock;
 import domain.model.drink.Drink;
-import domain.model.payment.Payments;
+import domain.model.payment.PaymentHolder;
 import infrastructure.InMemory.CashStockRepositoryImpl;
 import infrastructure.InMemory.DrinkRepositoryImpl;
 import infrastructure.InMemory.PaymentRepositoryImpl;
@@ -37,8 +37,8 @@ public class PurchaseUseCase {
   public void buy(int drinkId) {
 
     // 支払い済み金額を取得
-    Payments payments = paymentRepository.fetch();
-    int totalAmount = payments.getTotalAmount();
+    PaymentHolder paymentHolder = paymentRepository.fetch();
+    int totalAmount = paymentHolder.getTotalAmount();
 
     // 購入可能かチェック
     Drink drink = drinkRepository.fetchById( drinkId );
@@ -49,8 +49,9 @@ public class PurchaseUseCase {
       throw new RuntimeException();
     }
 
-    // ドリンクを出庫
-    drink.ship();
+    // 購入処理
+    drink.ship(); // ドリンクを出庫
+    paymentHolder.reset(); // 支払いをリセット
 
     // お釣りを返却
     int changeAmount = totalAmount - drink.getDrinkPrice();
@@ -64,7 +65,7 @@ public class PurchaseUseCase {
     // 永続化
     drinkRepository.store( drink );
     cashStockRepository.store( cashStock );
-    paymentRepository.release();
+    paymentRepository.store( paymentHolder );
 
     // コンソール表示
     purchasePresenter.showMessage( drink.getDrinkName(), changes );

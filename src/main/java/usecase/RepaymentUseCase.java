@@ -2,7 +2,7 @@ package usecase;
 
 import domain.model.cash.Cash;
 import domain.model.cash.CashStock;
-import domain.model.payment.Payments;
+import domain.model.payment.PaymentHolder;
 import infrastructure.InMemory.CashStockRepositoryImpl;
 import infrastructure.InMemory.PaymentRepositoryImpl;
 import presenter.RepaymentPresenter;
@@ -32,16 +32,19 @@ public class RepaymentUseCase {
   public void repay() {
 
     // 支払金額の合計を取得
-    Payments payments = paymentRepository.fetch();
-    int totalAmount = payments.getTotalAmount();
+    PaymentHolder paymentHolder = paymentRepository.fetch();
+    int totalAmount = paymentHolder.getTotalAmount();
 
     // お釣りの枚数を取得
     CashStock cashStock = cashStockRepository.fetch();
     List<Cash> changes = cashStock.putOut( totalAmount );
 
+    // 支払いをリセット
+    paymentHolder.reset();
+
     // 永続化
     cashStockRepository.store( cashStock );
-    paymentRepository.release();
+    paymentRepository.store( paymentHolder );
 
     // コンソール表示
     repaymentPresenter.showMessage( changes );

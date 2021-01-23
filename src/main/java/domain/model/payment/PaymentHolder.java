@@ -3,9 +3,9 @@ package domain.model.payment;
 import java.util.List;
 
 /**
- * 支払いを管理するクラス.
+ * 支払い記録を保持する集約.
  */
-public class Payments {
+public class PaymentHolder {
 
   private List<Payment> payments;
 
@@ -14,7 +14,7 @@ public class Payments {
    *
    * @param payments お金の投入履歴
    */
-  public Payments(List<Payment> payments) {
+  public PaymentHolder(List<Payment> payments) {
     this.payments = payments;
   }
 
@@ -34,6 +34,13 @@ public class Payments {
    */
   public int getTotalAmount() {
     return payments.stream().mapToInt( Payment::getAmount ).sum();
+  }
+
+  /**
+   * 支払いの初期化.
+   */
+  public void reset() {
+    payments.clear();
   }
 
   /**
