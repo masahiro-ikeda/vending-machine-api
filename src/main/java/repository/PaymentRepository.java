@@ -3,7 +3,7 @@ package repository;
 import domain.model.payment.Payments;
 
 /**
- * RDBではなく一時メモリに実装する想定.
+ * RDBではなくRedisなどの一時メモリに実装する想定.
  */
 public interface PaymentRepository {
 

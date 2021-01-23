@@ -15,16 +15,15 @@ public class Payment {
   /**
    * コンストラクタ.
    *
-   * @param amount       金額
-   * @param paidDatetime お金が投入された時間
+   * @param amount 金額
    */
-  Payment(int amount, LocalDateTime paidDatetime) {
+  public Payment(int amount) {
     MoneyType moneyType = MoneyType.getMoneyType( amount );
     if (moneyType == null) {
       throw new IllegalArgumentException( "Illegal Money." );
     }
     this.moneyType = moneyType;
-    this.paidDatetime = paidDatetime;
+    this.paidDatetime = LocalDateTime.now();
   }
 
   /**

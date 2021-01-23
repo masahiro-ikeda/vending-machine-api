@@ -1,6 +1,5 @@
 package domain.model.payment;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -22,10 +21,9 @@ public class Payments {
   /**
    * お金を投入する.
    *
-   * @param amount 投入した金額
+   * @param payment 投入した金額
    */
-  public void pay(int amount) {
-    Payment payment = new Payment( amount, LocalDateTime.now() );
+  public void pay(Payment payment) {
     payments.add( payment );
   }
 

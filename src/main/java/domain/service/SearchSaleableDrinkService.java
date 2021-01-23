@@ -8,6 +8,9 @@ import repository.DrinkRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 陳列するドリンクを取得するドメインサービス.
+ */
 public class SearchSaleableDrinkService {
 
   private DrinkRepository drinkRepository;
@@ -29,7 +32,7 @@ public class SearchSaleableDrinkService {
     // ドリンク一覧を取得
     List<Drink> drinks = drinkRepository.fetch();
 
-    // 陳列用のモデルに変換.
+    // 陳列用のモデルに変換
     List<DrinkDisplay> drinkDisplays = new ArrayList<>();
     for (Drink drink : drinks) {
       DrinkDisplay drinkDisplay = new DrinkDisplay(
