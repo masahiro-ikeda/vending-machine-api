@@ -1,9 +1,10 @@
-package api.usecase;
+package api.application;
 
-import api.domain.entity.drink.DrinkDisplay;
 import api.domain.entity.payment.PaymentHolder;
 import api.domain.service.SearchSaleableDrinkService;
-import api.repository.PaymentRepository;
+import api.presentation.viewmodel.DrinkViewModel;
+import api.presentation.viewmodel.VendingMachineViewModel;
+import api.domain.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,13 +24,17 @@ public class DisplayUseCase {
   }
 
   /**
-   * 表示するドリンク一覧を取得.
+   * 自動販売機を表示させるためのモデルを取得.
    *
-   * @return 陳列するドリンク一覧
+   * @return 自動販売機の画面表示モデル
    */
-  public List<DrinkDisplay> searchDrinkDisplays() {
+  public VendingMachineViewModel searchDrinkDisplays() {
+
+    // 飲料一覧を取得
     PaymentHolder paymentHolder = paymentRepository.fetch();
     int totalAmount = paymentHolder.getTotalAmount();
-    return searchSaleableDrinkService.getDisplayDrinks( totalAmount );
+    List<DrinkViewModel> drinkViewModels =  searchSaleableDrinkService.getDisplayDrinks( totalAmount );
+
+    return new VendingMachineViewModel( drinkViewModels, totalAmount );
   }
 }

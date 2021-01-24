@@ -1,20 +1,19 @@
-package api.controler;
+package api.presentation.controler;
 
-import api.controler.form.PaymentForm;
-import api.controler.form.PurchaseForm;
-import api.domain.entity.cash.Cash;
-import api.domain.entity.drink.DrinkDisplay;
-import api.usecase.DisplayUseCase;
-import api.usecase.PaymentUseCase;
-import api.usecase.PurchaseUseCase;
-import api.usecase.RepaymentUseCase;
+import api.presentation.controler.form.PaymentForm;
+import api.presentation.controler.form.PurchaseForm;
+import api.presentation.viewmodel.PurchaseViewModel;
+import api.presentation.viewmodel.RepaymentViewModel;
+import api.presentation.viewmodel.VendingMachineViewModel;
+import api.application.DisplayUseCase;
+import api.application.PaymentUseCase;
+import api.application.PurchaseUseCase;
+import api.application.RepaymentUseCase;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class OrderController {
@@ -32,22 +31,22 @@ public class OrderController {
   }
 
   @GetMapping
-  public List<DrinkDisplay> search() {
+  public VendingMachineViewModel search() {
     return displayUseCase.searchDrinkDisplays();
   }
 
   @PostMapping("pay")
-  public List<DrinkDisplay> pay(@Validated @RequestBody PaymentForm form) {
-    return paymentUseCase.pay( form.getAmount() );
+  public void pay(@Validated @RequestBody PaymentForm form) {
+    paymentUseCase.pay( form.getAmount() );
   }
 
   @PostMapping("buy")
-  public List<Cash> buy(@Validated @RequestBody PurchaseForm form) {
+  public PurchaseViewModel buy(@Validated @RequestBody PurchaseForm form) {
     return purchaseUseCase.buy( form.getDrinkId() );
   }
 
   @PostMapping("repay")
-  public List<Cash> repay() {
+  public RepaymentViewModel repay() {
     return repaymentUseCase.repay();
   }
 }

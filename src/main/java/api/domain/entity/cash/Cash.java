@@ -1,53 +1,41 @@
 package api.domain.entity.cash;
 
-import api.domain.enumeration.MoneyType;
+import api.domain.valueobject.Money;
+import api.domain.valueobject.Quantity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
  * 現金モデル.
- * 貨幣の種類と保持数を管理する
+ * 貨幣の種類と数量を保持
  */
+@AllArgsConstructor
 @Getter
 public class Cash {
 
-  // 貨幣の種類
-  private MoneyType moneyType;
+  // 貨幣
+  private final Money money;
   // 保持数
-  private int cashQuantity;
+  private Quantity cashQuantity;
 
   /**
-   * コンストラクタ.
+   * 保持数を増やす.
    *
-   * @param amount       額面
-   * @param cashQuantity 貨幣の残数
+   * @param increaseQuantity 増分
    */
-  public Cash(int amount, int cashQuantity) {
-    MoneyType moneyType = MoneyType.getType( amount );
-    if (moneyType == null) {
-      throw new IllegalArgumentException( "Illegal Money." );
-    }
-    this.moneyType = moneyType;
-    this.cashQuantity = cashQuantity;
+  void add(int increaseQuantity) {
+    cashQuantity = cashQuantity.increase( increaseQuantity );
   }
 
   /**
-   * 現金を増やす.
+   * 取り出す.
    *
-   * @param count 枚数
+   * @param takeQuantity 取り出し分
+   * @return 取り出した現金
    */
-  void add(int count) {
-    cashQuantity += count;
-  }
-
-  /**
-   * 現金を取り出す.
-   *
-   * @param count 枚数
-   * @return 取り出した貨幣
-   */
-  Cash take(int count) {
-    this.cashQuantity -= count;
-    return new Cash( moneyType.getValue(), count );
+  Cash take(int takeQuantity) {
+    cashQuantity = cashQuantity.decrease( takeQuantity );
+    return new Cash( money, new Quantity( takeQuantity ) );
   }
 
   /**
@@ -55,7 +43,7 @@ public class Cash {
    *
    * @return 合計残高
    */
-  int cashAmount() {
-    return moneyType.getValue() * cashQuantity;
+  int amount() {
+    return money.value() * cashQuantity.intValue();
   }
 }

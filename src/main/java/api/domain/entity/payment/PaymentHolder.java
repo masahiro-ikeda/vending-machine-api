@@ -29,7 +29,7 @@ public class PaymentHolder {
    * @return 投入済み金額の合計
    */
   public int getTotalAmount() {
-    return payments.stream().mapToInt( Payment::getAmount ).sum();
+    return payments.stream().mapToInt( payment -> payment.getMoney().value() ).sum();
   }
 
   /**

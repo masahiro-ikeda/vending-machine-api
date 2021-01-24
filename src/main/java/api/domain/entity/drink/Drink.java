@@ -1,17 +1,20 @@
 package api.domain.entity.drink;
 
-import api.domain.enumeration.DrinkTemperatureType;
+import api.domain.valueobject.Name;
+import api.domain.valueobject.Price;
+import api.domain.valueobject.Quantity;
+import api.domain.valueobject.TemperatureState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
 public class Drink {
-  private int drinkId;
-  private String drinkName;
-  private int drinkPrice;
-  private int drinkStockQuantity;
-  private DrinkTemperatureType drinkTemperatureType;
+  private final int drinkId;
+  private final Name drinkName;
+  private final Price drinkPrice;
+  private final TemperatureState temperatureState;
+  private Quantity drinkQuantity;
 
   /**
    * 購入可能か？
@@ -22,21 +25,18 @@ public class Drink {
   public boolean isSaleable(int amount) {
 
     // 価格チェック
-    if (amount < drinkPrice) {
+    if (amount < drinkPrice.intValue()) {
       return false;
     }
 
     // 在庫チェック
-    return drinkStockQuantity > 0;
+    return drinkQuantity.intValue() > 0;
   }
 
   /**
    * 在庫の出荷（売れた）.
    */
   public void ship() {
-    if (drinkStockQuantity <= 0) {
-      throw new RuntimeException( "Insufficient Stock." );
-    }
-    drinkStockQuantity = drinkStockQuantity - 1;
+    drinkQuantity.decrease( 1 );
   }
 }

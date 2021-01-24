@@ -1,4 +1,4 @@
-package api.repository;
+package api.domain.repository;
 
 import api.domain.entity.drink.Drink;
 

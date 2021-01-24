@@ -1,8 +1,8 @@
 package api.domain.service;
 
 import api.domain.entity.drink.Drink;
-import api.domain.entity.drink.DrinkDisplay;
-import api.repository.DrinkRepository;
+import api.presentation.viewmodel.DrinkViewModel;
+import api.domain.repository.DrinkRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,24 +25,24 @@ public class SearchSaleableDrinkService {
    *
    * @return ドリンク一覧
    */
-  public List<DrinkDisplay> getDisplayDrinks(int totalAmount) {
+  public List<DrinkViewModel> getDisplayDrinks(int totalAmount) {
 
     // ドリンク一覧を取得
     List<Drink> drinks = drinkRepository.fetch();
 
-    // 陳列用のモデルに変換
-    List<DrinkDisplay> drinkDisplays = new ArrayList<>();
+    // 表示用モデルに変換
+    List<DrinkViewModel> drinkViewModels = new ArrayList<>();
     for (Drink drink : drinks) {
-      DrinkDisplay drinkDisplay = new DrinkDisplay(
+      DrinkViewModel drinkViewModel = new DrinkViewModel(
           drink.getDrinkId(),
-          drink.getDrinkName(),
-          drink.getDrinkPrice(),
-          drink.isSaleable( totalAmount ),
-          drink.getDrinkTemperatureType().getValue()
+          drink.getDrinkName().value(),
+          drink.getDrinkPrice().intValue(),
+          drink.getTemperatureState().getValue(),
+          drink.isSaleable( totalAmount )
       );
-      drinkDisplays.add( drinkDisplay );
+      drinkViewModels.add( drinkViewModel );
     }
 
-    return drinkDisplays;
+    return drinkViewModels;
   }
 }

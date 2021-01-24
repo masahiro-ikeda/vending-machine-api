@@ -1,8 +1,11 @@
 package api.infrastructure.InMemory;
 
 import api.domain.entity.drink.Drink;
-import api.domain.enumeration.DrinkTemperatureType;
-import api.repository.DrinkRepository;
+import api.domain.valueobject.Name;
+import api.domain.valueobject.Price;
+import api.domain.valueobject.Quantity;
+import api.domain.valueobject.TemperatureState;
+import api.domain.repository.DrinkRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,10 +18,10 @@ public class DrinkRepositoryImpl implements DrinkRepository {
 
   // スレッドセーフではないけど...
   private static List<Drink> drinks = Arrays.asList(
-      new Drink( 1, "Orange", 120, 10, DrinkTemperatureType.COLD ),
-      new Drink( 2, "GreenTea", 100, 15, DrinkTemperatureType.COLD ),
-      new Drink( 3, "Coffee", 150, 3, DrinkTemperatureType.HOT ),
-      new Drink( 4, "Cola", 130, 1, DrinkTemperatureType.COLD )
+      new Drink( 1, new Name( "Orange" ), new Price( 120 ), TemperatureState.COLD, new Quantity( 5 ) ),
+      new Drink( 2, new Name( "GreenTea" ), new Price( 100 ), TemperatureState.COLD, new Quantity( 10 ) ),
+      new Drink( 3, new Name( "Coffee" ), new Price( 150 ), TemperatureState.HOT, new Quantity( 3 ) ),
+      new Drink( 4, new Name( "Cola" ), new Price( 130 ), TemperatureState.COLD, new Quantity( 1 ) )
   );
 
   @Override
@@ -36,8 +39,8 @@ public class DrinkRepositoryImpl implements DrinkRepository {
           target.get().getDrinkId(),
           target.get().getDrinkName(),
           target.get().getDrinkPrice(),
-          target.get().getDrinkStockQuantity(),
-          target.get().getDrinkTemperatureType()
+          target.get().getTemperatureState(),
+          target.get().getDrinkQuantity()
       );
     } else {
       return null;
