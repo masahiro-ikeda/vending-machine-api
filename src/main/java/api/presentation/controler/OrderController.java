@@ -1,21 +1,22 @@
 package api.presentation.controler;
 
-import api.presentation.controler.form.PaymentForm;
-import api.presentation.controler.form.PurchaseForm;
-import api.presentation.viewmodel.PurchaseViewModel;
-import api.presentation.viewmodel.RepaymentViewModel;
-import api.presentation.viewmodel.VendingMachineViewModel;
 import api.application.DisplayUseCase;
 import api.application.PaymentUseCase;
 import api.application.PurchaseUseCase;
 import api.application.RepaymentUseCase;
+import api.presentation.controler.form.PaymentForm;
+import api.presentation.controler.form.PurchaseForm;
+import api.presentation.viewmodel.DrinkViewModel;
+import api.presentation.viewmodel.PurchaseViewModel;
+import api.presentation.viewmodel.RepaymentViewModel;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("api")
+@CrossOrigin // TODO Webサーバー側に移植
 public class OrderController {
 
   private PaymentUseCase paymentUseCase;
@@ -30,14 +31,19 @@ public class OrderController {
     this.displayUseCase = displayUseCase;
   }
 
-  @GetMapping
-  public VendingMachineViewModel search() {
-    return displayUseCase.searchDrinkDisplays();
+  @GetMapping("drinks")
+  public List<DrinkViewModel> searchDrinks() {
+    return displayUseCase.searchDrinks();
+  }
+
+  @GetMapping("paymentAmount")
+  public int fetchPaymentAmount() {
+    return displayUseCase.fetchPaymentAmount();
   }
 
   @PostMapping("pay")
-  public void pay(@Validated @RequestBody PaymentForm form) {
-    paymentUseCase.pay( form.getAmount() );
+  public int pay(@Validated @RequestBody PaymentForm form) {
+    return paymentUseCase.pay( form.getAmount() );
   }
 
   @PostMapping("buy")

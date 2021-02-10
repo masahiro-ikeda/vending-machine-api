@@ -3,9 +3,9 @@ package api.application;
 import api.domain.entity.cash.CashManager;
 import api.domain.entity.payment.Payment;
 import api.domain.entity.payment.PaymentHolder;
-import api.domain.valueobject.Money;
 import api.domain.repository.CashManagerRepository;
 import api.domain.repository.PaymentRepository;
+import api.domain.valueobject.Money;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,8 +28,9 @@ public class PaymentUseCase {
    * お金を支払う.
    *
    * @param amount 投入した金額
+   * @return 支払い済み金額
    */
-  public void pay(int amount) {
+  public int pay(int amount) {
 
     // 支払い
     Payment payment = new Payment(
@@ -46,5 +47,7 @@ public class PaymentUseCase {
     //永続化
     paymentRepository.store( paymentHolder );
     cashManagerRepository.store( cashManager );
+
+    return paymentHolder.getTotalAmount();
   }
 }

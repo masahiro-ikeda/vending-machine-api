@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class PurchaseViewModel {
-
   private DrinkViewModel drink;
   private List<CashViewModel> changes;
 }

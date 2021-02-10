@@ -1,16 +1,15 @@
 package api.application;
 
 import api.domain.entity.payment.PaymentHolder;
+import api.domain.repository.PaymentRepository;
 import api.domain.service.SearchSaleableDrinkService;
 import api.presentation.viewmodel.DrinkViewModel;
-import api.presentation.viewmodel.VendingMachineViewModel;
-import api.domain.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * 表示するドリンクを取得するユースケース.
+ * 画面表示に関するデータを取得するユースケース.
  */
 @Service
 public class DisplayUseCase {
@@ -24,17 +23,29 @@ public class DisplayUseCase {
   }
 
   /**
-   * 自動販売機を表示させるためのモデルを取得.
+   * 飲料一覧を取得.
    *
-   * @return 自動販売機の画面表示モデル
+   * @return 飲料の画面表示モデル一覧
    */
-  public VendingMachineViewModel searchDrinkDisplays() {
+  public List<DrinkViewModel> searchDrinks() {
 
-    // 飲料一覧を取得
+    // 支払い済み金額を取得
     PaymentHolder paymentHolder = paymentRepository.fetch();
     int totalAmount = paymentHolder.getTotalAmount();
-    List<DrinkViewModel> drinkViewModels =  searchSaleableDrinkService.getDisplayDrinks( totalAmount );
 
-    return new VendingMachineViewModel( drinkViewModels, totalAmount );
+    // 飲料の画面表示モデル一覧を取得
+    List<DrinkViewModel> drinkViewModels = searchSaleableDrinkService.getDisplayDrinks( totalAmount );
+
+    return drinkViewModels;
+  }
+
+  /**
+   * 支払い済み金額を取得.
+   *
+   * @return 飲料の画面表示モデル一覧
+   */
+  public int fetchPaymentAmount() {
+    PaymentHolder paymentHolder = paymentRepository.fetch();
+    return paymentHolder.getTotalAmount();
   }
 }
