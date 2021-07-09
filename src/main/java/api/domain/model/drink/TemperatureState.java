@@ -1,4 +1,4 @@
-package api.domain.valueobject;
+package api.domain.model.drink;
 
 /**
  * ドリンクの温度状態.

@@ -3,13 +3,13 @@ package api.application;
 import api.domain.entity.cash.Cash;
 import api.domain.entity.cash.CashManager;
 import api.domain.entity.drink.Drink;
-import api.domain.entity.payment.PaymentHolder;
+import api.domain.model.payment.PaymentHolder;
 import api.presentation.viewmodel.CashViewModel;
 import api.presentation.viewmodel.DrinkViewModel;
 import api.presentation.viewmodel.PurchaseViewModel;
-import api.domain.repository.CashManagerRepository;
-import api.domain.repository.DrinkRepository;
-import api.domain.repository.PaymentRepository;
+import api.application.repository.CashManagerRepository;
+import api.application.repository.DrinkRepository;
+import api.application.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,7 +70,7 @@ public class PurchaseUseCase {
     paymentRepository.store( paymentHolder );
 
     List<CashViewModel> cashViewModels = changes.stream()
-        .map( cash -> new CashViewModel( cash.getMoney().value(), cash.getCashQuantity().intValue() ) ).collect( Collectors.toList() );
+        .map( cash -> new CashViewModel( cash.getYenCurrency().value(), cash.getCashQuantity().intValue() ) ).collect( Collectors.toList() );
 
     DrinkViewModel drinkViewModel = new DrinkViewModel(
         drink.getDrinkId(),

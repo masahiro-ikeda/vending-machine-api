@@ -2,10 +2,10 @@ package api.infrastructure.InMemory;
 
 import api.domain.entity.drink.Drink;
 import api.domain.valueobject.Name;
-import api.domain.valueobject.Price;
+import api.domain.valueobject.money.Price;
 import api.domain.valueobject.Quantity;
 import api.domain.valueobject.TemperatureState;
-import api.domain.repository.DrinkRepository;
+import api.application.repository.DrinkRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

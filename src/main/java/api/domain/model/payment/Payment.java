@@ -1,18 +1,16 @@
-package api.domain.entity.payment;
+package api.domain.model.payment;
 
-import api.domain.valueobject.Money;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 /**
- * お金の投入記録.
+ * 支払い.
  */
 @AllArgsConstructor
 @Getter
 public class Payment {
-
-  private final Money money;
+  private final YenCurrency yenCurrency;
   private final LocalDateTime paidDatetime;
 }

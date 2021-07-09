@@ -1,7 +1,7 @@
 package api.application;
 
-import api.domain.entity.payment.PaymentHolder;
-import api.domain.repository.PaymentRepository;
+import api.domain.model.payment.PaymentHolder;
+import api.application.repository.PaymentRepository;
 import api.domain.service.SearchSaleableDrinkService;
 import api.presentation.viewmodel.DrinkViewModel;
 import org.springframework.stereotype.Service;

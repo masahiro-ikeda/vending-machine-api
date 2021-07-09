@@ -1,8 +1,8 @@
 package api.infrastructure.InMemory;
 
-import api.domain.entity.payment.Payment;
-import api.domain.entity.payment.PaymentHolder;
-import api.domain.repository.PaymentRepository;
+import api.domain.model.payment.Payment;
+import api.domain.model.payment.PaymentHolder;
+import api.application.repository.PaymentRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

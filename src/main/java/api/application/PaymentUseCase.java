@@ -1,11 +1,11 @@
 package api.application;
 
 import api.domain.entity.cash.CashManager;
-import api.domain.entity.payment.Payment;
-import api.domain.entity.payment.PaymentHolder;
-import api.domain.repository.CashManagerRepository;
-import api.domain.repository.PaymentRepository;
-import api.domain.valueobject.Money;
+import api.domain.model.payment.Payment;
+import api.domain.model.payment.PaymentHolder;
+import api.application.repository.CashManagerRepository;
+import api.application.repository.PaymentRepository;
+import api.domain.model.payment.YenCurrency;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,7 +34,7 @@ public class PaymentUseCase {
 
     // 支払い
     Payment payment = new Payment(
-        Money.valueOf( amount ),
+        YenCurrency.of( amount ),
         LocalDateTime.now()
     );
     PaymentHolder paymentHolder = paymentRepository.fetch();

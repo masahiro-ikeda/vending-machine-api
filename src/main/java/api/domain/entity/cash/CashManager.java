@@ -1,6 +1,6 @@
 package api.domain.entity.cash;
 
-import api.domain.entity.payment.Payment;
+import api.domain.model.payment.Payment;
 import api.domain.valueobject.Quantity;
 import lombok.Getter;
 
@@ -26,7 +26,7 @@ public class CashManager {
     this.cashList = cashList;
     // 常に金額が大きい順にソート
     // TODO 取り出し用途に応じたソート順が使えるようにする
-    cashList.sort( (c1, c2) -> c2.getMoney().value() - c1.getMoney().value() );
+    cashList.sort( (c1, c2) -> c2.getYenCurrency().value() - c1.getYenCurrency().value() );
   }
 
   /**
@@ -35,12 +35,12 @@ public class CashManager {
    * @param payment 支払い
    */
   public void add(Payment payment) {
-    Optional<Cash> target = cashList.stream().filter( c -> c.getMoney() == payment.getMoney() ).findFirst();
+    Optional<Cash> target = cashList.stream().filter( c -> c.getYenCurrency() == payment.getYenCurrency() ).findFirst();
     if (target.isPresent()) {
       target.get().add( 1 );
     } else {
       // 未管理の貨幣は管理対象に追加
-      cashList.add( new Cash( payment.getMoney(), new Quantity( 1 ) ) );
+      cashList.add( new Cash( payment.getYenCurrency(), new Quantity( 1 ) ) );
     }
   }
 
@@ -55,10 +55,10 @@ public class CashManager {
     int takeAmount = 0;
     for (Cash cash : cashList) {
       int leftAmount = amount - takeAmount;
-      if (leftAmount < cash.getMoney().value()) {
+      if (leftAmount < cash.getYenCurrency().value()) {
         continue;
       }
-      int takeQuantity = leftAmount / cash.getMoney().value();
+      int takeQuantity = leftAmount / cash.getYenCurrency().value();
       Cash takeCash = cash.take( takeQuantity );
 
       takeCashList.add( takeCash );

@@ -1,4 +1,4 @@
-package api.domain.valueobject;
+package api.domain.model.drink;
 
 /**
  * 名称.

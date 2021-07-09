@@ -2,7 +2,7 @@ package api.domain.service;
 
 import api.domain.entity.drink.Drink;
 import api.presentation.viewmodel.DrinkViewModel;
-import api.domain.repository.DrinkRepository;
+import api.application.repository.DrinkRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

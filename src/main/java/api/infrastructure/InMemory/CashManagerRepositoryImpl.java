@@ -2,9 +2,9 @@ package api.infrastructure.InMemory;
 
 import api.domain.entity.cash.Cash;
 import api.domain.entity.cash.CashManager;
-import api.domain.valueobject.Money;
+import api.domain.model.payment.YenCurrency;
 import api.domain.valueobject.Quantity;
-import api.domain.repository.CashManagerRepository;
+import api.application.repository.CashManagerRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import java.util.List;
 public class CashManagerRepositoryImpl implements CashManagerRepository {
 
   private static List<Cash> cashList = Arrays.asList(
-      new Cash( Money.TEN,          new Quantity( 30 ) ),
-      new Cash( Money.FIFTY,        new Quantity( 30 ) ),
-      new Cash( Money.HUNDRED,      new Quantity( 30 ) ),
-      new Cash( Money.FIVE_HUNDRED, new Quantity( 30 ) ),
-      new Cash( Money.THOUSAND,     new Quantity( 30 ) )
+      new Cash( YenCurrency.TEN,          new Quantity( 30 ) ),
+      new Cash( YenCurrency.FIFTY,        new Quantity( 30 ) ),
+      new Cash( YenCurrency.HUNDRED,      new Quantity( 30 ) ),
+      new Cash( YenCurrency.FIVE_HUNDRED, new Quantity( 30 ) ),
+      new Cash( YenCurrency.THOUSAND,     new Quantity( 30 ) )
   );
 
   @Override

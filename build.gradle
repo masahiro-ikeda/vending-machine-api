@@ -1,10 +1,13 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.4.RELEASE")
-    }
+  ext {
+    springBootVersion = '2.5.2'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
 }
 
 apply plugin: 'java'
@@ -12,22 +15,29 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group 'com.sample.vendingmachine'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 11
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-devtools'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-devtools'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // lombok
-    compileOnly 'org.projectlombok:lombok:1.18.10'
-    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+  // jdbc
+  implementation 'mysql:mysql-connector-java:5.1.49'
 
-    // junit
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+  // lombok
+  compileOnly 'org.projectlombok:lombok:1.18.20'
+  annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+  // ユニットテスト用の依存を追加
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'junit', module: 'junit'
+  }
+  testImplementation 'org.dbunit:dbunit:2.6.0'
+
+  testImplementation(platform("org.testcontainers:testcontainers-bom:1.14.1"))
+  testImplementation("org.testcontainers:mysql")
 }

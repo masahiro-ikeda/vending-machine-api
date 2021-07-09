@@ -1,6 +1,6 @@
-package api.domain.repository;
+package api.application.repository;
 
-import api.domain.entity.payment.PaymentHolder;
+import api.domain.model.payment.PaymentHolder;
 
 /**
  * RDBではなくRedisなどの一時メモリに実装する想定.
