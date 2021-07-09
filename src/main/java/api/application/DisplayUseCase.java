@@ -1,12 +1,12 @@
 package api.application;
 
-import api.domain.model.payment.PaymentHolder;
+import java.util.List;
+import org.springframework.stereotype.Service;
 import api.application.repository.PaymentRepository;
+import api.domain.model.payment.PaymentAmount;
+import api.domain.model.payment.Payments;
 import api.domain.service.SearchSaleableDrinkService;
 import api.presentation.viewmodel.DrinkViewModel;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 画面表示に関するデータを取得するユースケース.
@@ -30,11 +30,11 @@ public class DisplayUseCase {
   public List<DrinkViewModel> searchDrinks() {
 
     // 支払い済み金額を取得
-    PaymentHolder paymentHolder = paymentRepository.fetch();
-    int totalAmount = paymentHolder.getTotalAmount();
+    Payments payments = paymentRepository.fetch();
+    PaymentAmount paymentAmount = new PaymentAmount(payments);
 
     // 飲料の画面表示モデル一覧を取得
-    List<DrinkViewModel> drinkViewModels = searchSaleableDrinkService.getDisplayDrinks( totalAmount );
+    List<DrinkViewModel> drinkViewModels = searchSaleableDrinkService.getDisplayDrinks( paymentAmount.value() );
 
     return drinkViewModels;
   }
@@ -45,7 +45,10 @@ public class DisplayUseCase {
    * @return 飲料の画面表示モデル一覧
    */
   public int fetchPaymentAmount() {
-    PaymentHolder paymentHolder = paymentRepository.fetch();
-    return paymentHolder.getTotalAmount();
+    // 支払い済み金額を取得
+    Payments payments = paymentRepository.fetch();
+    PaymentAmount paymentAmount = new PaymentAmount(payments);
+
+    return paymentAmount.value();
   }
 }

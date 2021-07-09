@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public class Drink {
   private final int drinkId;
   private final Price drinkPrice;
@@ -19,7 +20,7 @@ public class Drink {
   public boolean canPurchase(PaymentAmount paymentAmount, Quantity orderQuantity) {
 
     // 価格チェック
-    if (paymentAmount.totalPaymentAmount() < drinkPrice.value()) {
+    if (paymentAmount.value() < drinkPrice.value()) {
       return false;
     }
 

@@ -1,14 +1,13 @@
 package api.application;
 
-import api.domain.entity.cash.CashManager;
-import api.domain.model.payment.Payment;
-import api.domain.model.payment.PaymentHolder;
+import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
 import api.application.repository.CashManagerRepository;
 import api.application.repository.PaymentRepository;
+import api.domain.entity.cash.CashManager;
+import api.domain.model.payment.Payment;
+import api.domain.model.payment.PaymentAmount;
 import api.domain.model.payment.YenCurrency;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 /**
  * 支払いユースケース.
@@ -37,17 +36,15 @@ public class PaymentUseCase {
         YenCurrency.of( amount ),
         LocalDateTime.now()
     );
-    PaymentHolder paymentHolder = paymentRepository.fetch();
-    paymentHolder.pay( payment );
 
     // 現金残高を増やす
     CashManager cashManager = cashManagerRepository.fetch();
     cashManager.add( payment );
 
     //永続化
-    paymentRepository.store( paymentHolder );
+    paymentRepository.store( payment );
     cashManagerRepository.store( cashManager );
 
-    return paymentHolder.getTotalAmount();
+    return new PaymentAmount(paymentRepository.fetch()).value();
   }
 }

@@ -1,21 +1,22 @@
 package api.application.repository;
 
-import api.domain.model.payment.PaymentHolder;
+import api.domain.model.payment.Payment;
+import api.domain.model.payment.Payments;
 
 /**
- * RDBではなくRedisなどの一時メモリに実装する想定.
+ * 支払の永続化層.
  */
 public interface PaymentRepository {
 
   /**
-   * 支払い記録を保存する.
+   * 支払を追加.
    *
-   * @param paymentHolder 支払いの集約
+   * @param payment 支払
    */
-  void store(PaymentHolder paymentHolder);
+  void store(Payment payment);
 
   /**
    * 支払記録を取得.
    */
-  PaymentHolder fetch();
+  Payments fetch();
 }

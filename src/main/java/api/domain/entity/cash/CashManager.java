@@ -1,12 +1,11 @@
 package api.domain.entity.cash;
 
-import api.domain.model.payment.Payment;
-import api.domain.valueobject.Quantity;
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import api.domain.model.drink.Quantity;
+import api.domain.model.payment.Payment;
+import lombok.Getter;
 
 /**
  * 現金管理クラス（集約）.
@@ -37,7 +36,7 @@ public class CashManager {
   public void add(Payment payment) {
     Optional<Cash> target = cashList.stream().filter( c -> c.getYenCurrency() == payment.getYenCurrency() ).findFirst();
     if (target.isPresent()) {
-      target.get().add( 1 );
+      target.get().add( new Quantity(1) );
     } else {
       // 未管理の貨幣は管理対象に追加
       cashList.add( new Cash( payment.getYenCurrency(), new Quantity( 1 ) ) );
@@ -59,7 +58,7 @@ public class CashManager {
         continue;
       }
       int takeQuantity = leftAmount / cash.getYenCurrency().value();
-      Cash takeCash = cash.take( takeQuantity );
+      Cash takeCash = cash.take( new Quantity(takeQuantity) );
 
       takeCashList.add( takeCash );
       takeAmount += takeCash.amount();

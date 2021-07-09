@@ -1,8 +1,8 @@
 package api.application.repository;
 
-import api.domain.entity.drink.Drink;
-
 import java.util.List;
+import api.domain.model.drink.Drink;
+import api.infrastructure.InMemory.DrinkData;
 
 public interface DrinkRepository {
 
@@ -11,7 +11,7 @@ public interface DrinkRepository {
    *
    * @return 全ドリンク
    */
-  List<Drink> fetch();
+  List<DrinkData> fetch();
 
   /**
    * ドリンク情報を取得.
@@ -20,11 +20,4 @@ public interface DrinkRepository {
    * @return ドリンク
    */
   Drink fetchById(int drinkId);
-
-  /**
-   * ドリンク情報の更新.
-   *
-   * @param drink ドリンク
-   */
-  void store(Drink drink);
 }

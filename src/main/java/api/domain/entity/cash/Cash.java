@@ -1,7 +1,7 @@
 package api.domain.entity.cash;
 
+import api.domain.model.drink.Quantity;
 import api.domain.model.payment.YenCurrency;
-import api.domain.valueobject.Quantity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,8 +23,8 @@ public class Cash {
    *
    * @param increaseQuantity 増分
    */
-  void add(int increaseQuantity) {
-    cashQuantity = cashQuantity.increase( increaseQuantity );
+  void add(Quantity increased) {
+    cashQuantity = cashQuantity.increase( increased );
   }
 
   /**
@@ -33,9 +33,9 @@ public class Cash {
    * @param takeQuantity 取り出し分
    * @return 取り出した現金
    */
-  Cash take(int takeQuantity) {
-    cashQuantity = cashQuantity.decrease( takeQuantity );
-    return new Cash(yenCurrency, new Quantity( takeQuantity ) );
+  Cash take(Quantity token) {
+    cashQuantity = cashQuantity.decrease( token );
+    return new Cash(yenCurrency, new Quantity( token.value() ) );
   }
 
   /**
@@ -44,6 +44,6 @@ public class Cash {
    * @return 合計残高
    */
   int amount() {
-    return yenCurrency.value() * cashQuantity.intValue();
+    return yenCurrency.value() * cashQuantity.value();
   }
 }

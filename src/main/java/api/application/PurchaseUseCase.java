@@ -1,19 +1,20 @@
 package api.application;
 
-import api.domain.entity.cash.Cash;
-import api.domain.entity.cash.CashManager;
-import api.domain.entity.drink.Drink;
-import api.domain.model.payment.PaymentHolder;
-import api.presentation.viewmodel.CashViewModel;
-import api.presentation.viewmodel.DrinkViewModel;
-import api.presentation.viewmodel.PurchaseViewModel;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 import api.application.repository.CashManagerRepository;
 import api.application.repository.DrinkRepository;
 import api.application.repository.PaymentRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import api.domain.entity.cash.Cash;
+import api.domain.entity.cash.CashManager;
+import api.domain.model.drink.Drink;
+import api.domain.model.drink.Quantity;
+import api.domain.model.payment.PaymentAmount;
+import api.domain.model.payment.Payments;
+import api.presentation.viewmodel.CashViewModel;
+import api.presentation.viewmodel.DrinkViewModel;
+import api.presentation.viewmodel.PurchaseViewModel;
 
 /**
  * ドリンクの購入ユースケース.
@@ -39,24 +40,24 @@ public class PurchaseUseCase {
   public PurchaseViewModel buy(int drinkId) {
 
     // 支払い済み金額を取得
-    PaymentHolder paymentHolder = paymentRepository.fetch();
-    int totalAmount = paymentHolder.getTotalAmount();
+    Payments payments = paymentRepository.fetch();
+    int totalAmount = new PaymentAmount(payments).value();
 
     // 購入可能かチェック
     Drink drink = drinkRepository.fetchById( drinkId );
     if (drink == null) {
       throw new RuntimeException( "Illegal drinkId." );
     }
-    if (!drink.isSaleable( totalAmount )) {
+    if (!drink.canPurchase( new PaymentAmount(payments), new Quantity(1) )) {
       throw new RuntimeException( "Shortage Payment Amount." );
     }
 
     // 購入処理
-    drink.ship(); // ドリンクを出庫
-    paymentHolder.reset(); // 支払いをリセット
+    //drink.ship(); // ドリンクを出庫
+    payments.reset(); // 支払いをリセット
 
     // お釣りを返却
-    int changeAmount = totalAmount - drink.getDrinkPrice().intValue();
+    int changeAmount = totalAmount - drink.getDrinkPrice().value();
     CashManager cashManager = cashManagerRepository.fetch();
     // お釣りが足りるか？
     if (changeAmount > cashManager.getTotalAmount()) {
@@ -65,19 +66,19 @@ public class PurchaseUseCase {
     List<Cash> changes = cashManager.take( changeAmount );
 
     // 永続化
-    drinkRepository.store( drink );
+    //drinkRepository.store( drink );
     cashManagerRepository.store( cashManager );
-    paymentRepository.store( paymentHolder );
+    //paymentRepository.store( payments );
 
     List<CashViewModel> cashViewModels = changes.stream()
-        .map( cash -> new CashViewModel( cash.getYenCurrency().value(), cash.getCashQuantity().intValue() ) ).collect( Collectors.toList() );
+        .map( cash -> new CashViewModel( cash.getYenCurrency().value(), cash.getCashQuantity().value() ) ).collect( Collectors.toList() );
 
     DrinkViewModel drinkViewModel = new DrinkViewModel(
         drink.getDrinkId(),
-        drink.getDrinkName().value(),
-        drink.getDrinkPrice().intValue(),
-        drink.getTemperatureState().getValue(),
-        drink.isSaleable( totalAmount )
+        "test",
+        drink.getDrinkPrice().value(),
+        "cold",
+        drink.canPurchase(new PaymentAmount(payments), new Quantity(1))
     );
 
     return new PurchaseViewModel( drinkViewModel, cashViewModels );

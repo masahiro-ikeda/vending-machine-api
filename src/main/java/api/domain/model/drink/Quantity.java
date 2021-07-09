@@ -48,6 +48,10 @@ public class Quantity {
    *
    * @return 数量
    */
+  public int value() {
+    return value;
+  }
+
   public boolean canShip(Quantity orderQuantity) {
     return this.value >= orderQuantity.value;
   }

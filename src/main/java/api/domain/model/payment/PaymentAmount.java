@@ -22,7 +22,7 @@ public class PaymentAmount {
    *
    * @return 投入済み金額の合計
    */
-  public int totalPaymentAmount() {
+  public int value() {
     return value;
   }
 }

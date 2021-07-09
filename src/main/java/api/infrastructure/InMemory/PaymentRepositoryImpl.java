@@ -1,12 +1,11 @@
 package api.infrastructure.InMemory;
 
-import api.domain.model.payment.Payment;
-import api.domain.model.payment.PaymentHolder;
-import api.application.repository.PaymentRepository;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
+import api.application.repository.PaymentRepository;
+import api.domain.model.payment.Payment;
+import api.domain.model.payment.Payments;
 
 @Component
 public class PaymentRepositoryImpl implements PaymentRepository {
@@ -15,13 +14,13 @@ public class PaymentRepositoryImpl implements PaymentRepository {
   private static List<Payment> payments = new ArrayList<>();
 
   @Override
-  public void store(PaymentHolder paymentHolder) {
-    payments = paymentHolder.getPayments();
+  public void store(Payment payment) {
+    payments.add(payment);
   }
 
   @Override
-  public PaymentHolder fetch() {
+  public Payments fetch() {
     // ディープコピーを返す
-    return new PaymentHolder( new ArrayList<>( payments ) );
+    return new Payments( List.copyOf(payments) );
   }
 }
