@@ -1,4 +1,4 @@
-package api.domain.model.drink;
+package api.domain.valueobject;
 
 /**
  * 名称.
@@ -18,10 +18,10 @@ public class Name {
    */
   public Name(String name) {
     if (name == null) {
-      throw new IllegalArgumentException( "" );
+      throw new NullPointerException( "Name cannot null." );
     }
     if (name.length() > MAX_LENGTH) {
-      throw new IllegalArgumentException( "" );
+      throw new IllegalArgumentException( "Name too long." );
     }
     this.name = name;
   }

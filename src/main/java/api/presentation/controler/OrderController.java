@@ -19,16 +19,12 @@ import java.util.List;
 @CrossOrigin // TODO Webサーバー側に移植
 public class OrderController {
 
-  private PaymentUseCase paymentUseCase;
+
   private PurchaseUseCase purchaseUseCase;
-  private RepaymentUseCase repaymentUseCase;
   private DisplayUseCase displayUseCase;
 
-  public OrderController(PaymentUseCase paymentUseCase, PurchaseUseCase purchaseUseCase, RepaymentUseCase repaymentUseCase, DisplayUseCase displayUseCase) {
-    this.paymentUseCase = paymentUseCase;
+  public OrderController(PurchaseUseCase purchaseUseCase) {
     this.purchaseUseCase = purchaseUseCase;
-    this.repaymentUseCase = repaymentUseCase;
-    this.displayUseCase = displayUseCase;
   }
 
   @GetMapping("drinks")
@@ -41,18 +37,9 @@ public class OrderController {
     return displayUseCase.fetchPaymentAmount();
   }
 
-  @PostMapping("pay")
-  public int pay(@Validated @RequestBody PaymentForm form) {
-    return paymentUseCase.pay( form.getAmount() );
-  }
 
   @PostMapping("buy")
   public PurchaseViewModel buy(@Validated @RequestBody PurchaseForm form) {
     return purchaseUseCase.buy( form.getDrinkId() );
-  }
-
-  @PostMapping("repay")
-  public RepaymentViewModel repay() {
-    return repaymentUseCase.repay();
   }
 }

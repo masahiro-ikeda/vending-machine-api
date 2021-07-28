@@ -2,7 +2,7 @@ package api.application.repository;
 
 import java.util.List;
 import api.domain.model.drink.Drink;
-import api.infrastructure.InMemory.DrinkData;
+import api.infrastructure.inmemory.DrinkData;
 
 public interface DrinkRepository {
 

@@ -1,4 +1,4 @@
-package api.domain.model.drink;
+package api.domain.valueobject;
 
 /**
  * 数量を表す値オブジェクト.

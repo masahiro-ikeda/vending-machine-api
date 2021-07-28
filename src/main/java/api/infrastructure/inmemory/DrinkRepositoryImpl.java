@@ -1,4 +1,4 @@
-package api.infrastructure.InMemory;
+package api.infrastructure.inmemory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import api.application.repository.DrinkRepository;
 import api.domain.model.drink.Drink;
-import api.domain.model.drink.Price;
-import api.domain.model.drink.Quantity;
+import api.domain.valueobject.Price;
+import api.domain.valueobject.Quantity;
 
 @Component
 public class DrinkRepositoryImpl implements DrinkRepository {

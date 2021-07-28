@@ -1,10 +1,8 @@
 package api.application;
 
-import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import api.application.repository.CashManagerRepository;
 import api.application.repository.PaymentRepository;
-import api.domain.entity.cash.CashManager;
 import api.domain.model.payment.Payment;
 import api.domain.model.payment.PaymentAmount;
 import api.domain.model.payment.YenCurrency;
@@ -15,8 +13,8 @@ import api.domain.model.payment.YenCurrency;
 @Service
 public class PaymentUseCase {
 
-  private PaymentRepository paymentRepository;
-  private CashManagerRepository cashManagerRepository;
+  private final PaymentRepository paymentRepository;
+  private final CashManagerRepository cashManagerRepository;
 
   public PaymentUseCase(PaymentRepository paymentRepository, CashManagerRepository cashManagerRepository) {
     this.paymentRepository = paymentRepository;
@@ -26,25 +24,23 @@ public class PaymentUseCase {
   /**
    * お金を支払う.
    *
-   * @param amount 投入した金額
+   * @param inputAmount 投入した金額
    * @return 支払い済み金額
    */
-  public int pay(int amount) {
+  public int pay(int inputAmount) {
 
     // 支払い
-    Payment payment = new Payment(
-        YenCurrency.of( amount ),
-        LocalDateTime.now()
-    );
+    var inputMoney = YenCurrency.of( inputAmount );
+    var payment = Payment.newPay( inputMoney );
 
     // 現金残高を増やす
-    CashManager cashManager = cashManagerRepository.fetch();
-    cashManager.add( payment );
+//    CashStocks cashStocks = cashManagerRepository.fetch();
+//    cashStocks.add( payment );
 
     //永続化
     paymentRepository.store( payment );
-    cashManagerRepository.store( cashManager );
+    //cashManagerRepository.store( cashStocks );
 
-    return new PaymentAmount(paymentRepository.fetch()).value();
+    return new PaymentAmount( paymentRepository.fetch() ).value();
   }
 }

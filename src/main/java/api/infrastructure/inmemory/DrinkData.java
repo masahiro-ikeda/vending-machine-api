@@ -1,4 +1,4 @@
-package api.infrastructure.InMemory;
+package api.infrastructure.inmemory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

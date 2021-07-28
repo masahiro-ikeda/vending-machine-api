@@ -4,11 +4,11 @@ package api.domain.model.payment;
  * 自動販売機で使える貨幣.
  */
 public enum YenCurrency {
-  TEN(10),
-  FIFTY(50),
-  HUNDRED(100),
-  FIVE_HUNDRED(500),
-  THOUSAND(1000);
+  TEN( 10 ),
+  FIFTY( 50 ),
+  HUNDRED( 100 ),
+  FIVE_HUNDRED( 500 ),
+  THOUSAND( 1000 );
 
   // 額面
   private final int value;
@@ -19,6 +19,10 @@ public enum YenCurrency {
 
   public int value() {
     return this.value;
+  }
+
+  public PaymentAmount amount() {
+    return new PaymentAmount( value );
   }
 
   /**
@@ -33,6 +37,6 @@ public enum YenCurrency {
         return yenCurrency;
       }
     }
-    throw new IllegalArgumentException("Illegal Yen Currency.");
+    throw new IllegalArgumentException( "Illegal Yen Currency." );
   }
 }

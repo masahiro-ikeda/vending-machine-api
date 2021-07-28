@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import api.application.repository.CashManagerRepository;
 import api.application.repository.DrinkRepository;
 import api.application.repository.PaymentRepository;
-import api.domain.entity.cash.Cash;
-import api.domain.entity.cash.CashManager;
+import api.domain.model.cash.CashStock;
+import api.domain.model.cash.CashStocks;
 import api.domain.model.drink.Drink;
-import api.domain.model.drink.Quantity;
+import api.domain.valueobject.Quantity;
 import api.domain.model.payment.PaymentAmount;
 import api.domain.model.payment.Payments;
 import api.presentation.viewmodel.CashViewModel;
@@ -54,20 +54,20 @@ public class PurchaseUseCase {
 
     // 購入処理
     //drink.ship(); // ドリンクを出庫
-    payments.reset(); // 支払いをリセット
+    payments.repay(); // 支払いをリセット
 
     // お釣りを返却
     int changeAmount = totalAmount - drink.getDrinkPrice().value();
-    CashManager cashManager = cashManagerRepository.fetch();
+    CashStocks cashStocks = cashManagerRepository.fetch();
     // お釣りが足りるか？
-    if (changeAmount > cashManager.getTotalAmount()) {
-      throw new RuntimeException( "Shortage Cash For Change." );
+    if (changeAmount > cashStocks.getTotalAmount()) {
+      throw new RuntimeException( "Shortage CashStock For Change." );
     }
-    List<Cash> changes = cashManager.take( changeAmount );
+    List<CashStock> changes = cashStocks.take( changeAmount );
 
     // 永続化
     //drinkRepository.store( drink );
-    cashManagerRepository.store( cashManager );
+    cashManagerRepository.store( cashStocks );
     //paymentRepository.store( payments );
 
     List<CashViewModel> cashViewModels = changes.stream()

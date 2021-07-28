@@ -1,6 +1,6 @@
-package api.domain.entity.cash;
+package api.domain.model.cash;
 
-import api.domain.model.drink.Quantity;
+import api.domain.valueobject.Quantity;
 import api.domain.model.payment.YenCurrency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class Cash {
+public class CashStock {
 
   // 貨幣
   private final YenCurrency yenCurrency;
@@ -21,7 +21,7 @@ public class Cash {
   /**
    * 保持数を増やす.
    *
-   * @param increaseQuantity 増分
+   * @param increased 増分
    */
   void add(Quantity increased) {
     cashQuantity = cashQuantity.increase( increased );
@@ -30,12 +30,12 @@ public class Cash {
   /**
    * 取り出す.
    *
-   * @param takeQuantity 取り出し分
+   * @param token 取り出し分
    * @return 取り出した現金
    */
-  Cash take(Quantity token) {
+  CashStock take(Quantity token) {
     cashQuantity = cashQuantity.decrease( token );
-    return new Cash(yenCurrency, new Quantity( token.value() ) );
+    return new CashStock( yenCurrency, new Quantity( token.value() ) );
   }
 
   /**
@@ -43,7 +43,7 @@ public class Cash {
    *
    * @return 合計残高
    */
-  int amount() {
+  int sum() {
     return yenCurrency.value() * cashQuantity.value();
   }
 }

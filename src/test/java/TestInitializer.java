@@ -13,12 +13,12 @@ public class TestInitializer implements ApplicationContextInitializer<Configurab
   private static final String INIT_D_PATH = "../../main/resources/init";
 
   /* テスト実施時に起動するコンテナ設定 */
-  private static final MySQLContainer MYSQL = (MySQLContainer) new MySQLContainer("mysql:5.7")
-      .withEnv("MYSQL_USER", "test")
-      .withEnv("MYSQL_PASSWORD", "pass")
-      .withEnv("MYSQL_DATABASE", "test_db")
-      .withClasspathResourceMapping(INIT_D_PATH, "/docker-entrypoint-initdb.d", BindMode.READ_ONLY)
-      .withExposedPorts(3306);
+  private static final MySQLContainer MYSQL = (MySQLContainer) new MySQLContainer( "mysql:5.7" )
+      .withEnv( "MYSQL_USER", "test" )
+      .withEnv( "MYSQL_PASSWORD", "pass" )
+      .withEnv( "MYSQL_DATABASE", "test_db" )
+      .withClasspathResourceMapping( INIT_D_PATH, "/docker-entrypoint-initdb.d", BindMode.READ_ONLY )
+      .withExposedPorts( 3306 );
 
   static {
     MYSQL.start();
@@ -34,6 +34,6 @@ public class TestInitializer implements ApplicationContextInitializer<Configurab
         "spring.datasource.username=" + MYSQL.getUsername(),
         "spring.datasource.password=" + MYSQL.getPassword(),
         "spring.datasource.driverClassName=" + "com.mysql.jdbc.Driver"
-    ).applyTo(context.getEnvironment());
+    ).applyTo( context.getEnvironment() );
   }
 }

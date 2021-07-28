@@ -1,4 +1,4 @@
-package api.infrastructure.InMemory;
+package api.infrastructure.inmemory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import api.application.repository.PaymentRepository;
 import api.domain.model.payment.Payment;
 import api.domain.model.payment.Payments;
 
-@Component
+//@Component
 public class PaymentRepositoryImpl implements PaymentRepository {
 
   // スレッドセーフではないけど...

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 /**
- * 支払い.
+ * 支払の集約.
  */
 @AllArgsConstructor
 public class Payments {
@@ -15,13 +15,16 @@ public class Payments {
    * 支払いリスト.
    */
   public List<Payment> payments() {
-    return List.copyOf(payments);
+    return List.copyOf( payments );
   }
 
   /**
-   * 支払いの初期化.
+   * 返金.
    */
-  public void reset() {
-    payments.clear();
+  public Payment repay() {
+    PaymentAmount repayAmount = new PaymentAmount( this );
+    Payment repayment = Payment.newRepay( repayAmount );
+    payments.add( repayment );
+    return repayment;
   }
 }

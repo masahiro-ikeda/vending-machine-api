@@ -1,6 +1,8 @@
 package api.domain.model.drink;
 
 import api.domain.model.payment.PaymentAmount;
+import api.domain.valueobject.Price;
+import api.domain.valueobject.Quantity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -25,7 +27,7 @@ public class Drink {
     }
 
     // 在庫チェック
-    if (!drinkQuantity.canShip(orderQuantity)) {
+    if (!drinkQuantity.canShip( orderQuantity )) {
       return false;
     }
 

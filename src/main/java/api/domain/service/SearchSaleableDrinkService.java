@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import api.application.repository.DrinkRepository;
-import api.infrastructure.InMemory.DrinkData;
+import api.infrastructure.inmemory.DrinkData;
 import api.presentation.viewmodel.DrinkViewModel;
 
 /**

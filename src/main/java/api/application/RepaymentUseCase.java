@@ -2,11 +2,13 @@ package api.application;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import api.domain.model.payment.Payment;
 import org.springframework.stereotype.Service;
 import api.application.repository.CashManagerRepository;
 import api.application.repository.PaymentRepository;
-import api.domain.entity.cash.Cash;
-import api.domain.entity.cash.CashManager;
+import api.domain.model.cash.CashStock;
+import api.domain.model.cash.CashStocks;
 import api.domain.model.payment.PaymentAmount;
 import api.domain.model.payment.Payments;
 import api.presentation.viewmodel.CashViewModel;
@@ -31,19 +33,19 @@ public class RepaymentUseCase {
    */
   public RepaymentViewModel repay() {
 
-    // 支払金額の合計を取得
-    Payments payments = paymentRepository.fetch();
-    int totalAmount = new PaymentAmount(payments).value();
+    // 返金記録を作成
+    var payments = paymentRepository.fetch();
+    var repayment = payments.repay();
+    paymentRepository.store( repayment );
+
+    int totalAmount = repayment.value();
 
     // お釣りの枚数を取得
-    CashManager cashManager = cashManagerRepository.fetch();
-    List<Cash> repayments = cashManager.take( totalAmount );
-
-    // 支払いをリセット
-    payments.reset();
+    CashStocks cashStocks = cashManagerRepository.fetch();
+    List<CashStock> repayments = cashStocks.take( totalAmount );
 
     // 永続化
-    cashManagerRepository.store( cashManager );
+    cashManagerRepository.store( cashStocks );
     //paymentRepository.store( payments );
 
     List<CashViewModel> cashViewModels = repayments.stream()
