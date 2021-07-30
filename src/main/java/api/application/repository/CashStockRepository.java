@@ -1,6 +1,6 @@
 package api.application.repository;
 
-import api.domain.model.cash.CashStock;
+import api.domain.model.cash.CashStocks;
 
 public interface CashStockRepository {
 
@@ -9,12 +9,12 @@ public interface CashStockRepository {
    *
    * @return 保有現金
    */
-  CashStock fetch();
+  CashStocks fetch();
 
   /**
    * 保有現金の更新.
    *
-   * @param cashStock 保有現金
+   * @param cashStocks 保有現金
    */
-  void store(CashStock cashStock);
+  void store(CashStocks cashStocks);
 }

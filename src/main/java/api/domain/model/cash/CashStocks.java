@@ -1,22 +1,28 @@
 package api.domain.model.cash;
 
-import api.domain.model.common.YenCurrency;
 import api.domain.model.cash.inout.CashInout;
 import api.domain.model.cash.inout.CashInoutFactory;
-import api.domain.model.cash.inout.CashInoutType;
+import api.domain.model.cash.stock.CashQuantity;
+import api.domain.model.cash.stock.CashStock;
+import api.domain.model.common.YenCurrency;
 import api.domain.model.payments.ReturnAmount;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 現金残枚数クラス（集約）.
+ * 貨幣保有数を管理する集約.
  */
-public class CashStock {
+public class CashStocks {
 
-  // 保有する現金一覧
+  // 入出金記録一覧
   private final List<CashInout> cashInoutList;
-  private final Map<YenCurrency, CashQuantity> cashQuantityMap;
+  // 保有する貨幣一覧
+  private List<CashStock> cashStockList;
+  // 保有する合計金額
   private CashTotalAmount cashTotalAmount;
 
   /**
@@ -24,46 +30,35 @@ public class CashStock {
    *
    * @param cashInoutList 現金一覧
    */
-  public CashStock(List<CashInout> cashInoutList) {
+  public CashStocks(List<CashInout> cashInoutList) {
     if (cashInoutList == null) {
       throw new IllegalArgumentException( "CashInoutList Not Permit Null." );
     }
     this.cashInoutList = cashInoutList;
 
-    // 保有残高の計算
-    this.cashTotalAmount = new CashTotalAmount( this.cashInoutList );
-
     // 保有枚数の計算
-    cashQuantityMap = new HashMap<>();
     countCashQuantity();
+
+    // 保有残高の計算
+    this.cashTotalAmount = new CashTotalAmount( this.cashStockList );
   }
 
   /**
    * 保持している現金の枚数を数える.
    */
   private void countCashQuantity() {
+    this.cashStockList = new ArrayList<>();
+
     // 入出金がない場合は何もしない
     if (this.cashInoutList.size() == 0) {
       return;
     }
 
     var currencyList = YenCurrency.values();
-    var sortedList = cashInoutList.stream().sorted( Comparator.comparing( CashInout::cashInoutAt ) ).collect( Collectors.toList() );
     for (YenCurrency yenCurrency : currencyList) {
-      CashQuantity cashQuantity = new CashQuantity( 0 );
-      // 該当するお金の枚数を数える
-      for (CashInout inout : sortedList) {
-        // TODO ここのロジックはスッキリさせたい
-        if (yenCurrency == inout.yenCurrency()) {
-          if (inout.cashInoutType() == CashInoutType.IN) {
-            cashQuantity = new CashQuantity( cashQuantity.value() + inout.cashInoutQuantity().value() );
-          }
-          if (inout.cashInoutType() == CashInoutType.OUT) {
-            cashQuantity = new CashQuantity( cashQuantity.value() - inout.cashInoutQuantity().value() );
-          }
-        }
-      }
-      cashQuantityMap.put( yenCurrency, cashQuantity );
+      var cashInoutByCurrency = cashInoutList.stream().filter( e -> e.yenCurrency() == yenCurrency ).collect( Collectors.toList() );
+      CashStock cashStockByCurrency = new CashStock( yenCurrency, cashInoutByCurrency );
+      cashStockList.add( cashStockByCurrency );
     }
   }
 
@@ -76,11 +71,11 @@ public class CashStock {
     var paymentCashInout = CashInoutFactory.newIn( paymentYenCurrency );
     cashInoutList.add( paymentCashInout );
 
-    // 保有残高の再計算
-    this.cashTotalAmount = new CashTotalAmount( this.cashInoutList );
-
     // 保有枚数の再計算
     countCashQuantity();
+
+    // 保有残高の計算
+    this.cashTotalAmount = new CashTotalAmount( this.cashStockList );
   }
 
   /**
@@ -95,35 +90,35 @@ public class CashStock {
     var yenCurrencyList = Arrays.asList( YenCurrency.values() );
     Collections.reverse( yenCurrencyList );
 
+    // 金額が大きい順にソート
+    var sortedCashStockListByCurrencyDesc = this.cashStockList.stream().sorted(
+        (s1, s2) -> s2.yenCurrency().value() - s1.yenCurrency().value() ).collect( Collectors.toList() );
+
     // 出金済金額
     int outAmount = 0;
-    for (YenCurrency yenCurrency : yenCurrencyList) {
+    for (CashStock cashStock : sortedCashStockListByCurrencyDesc) {
       // 未出金残額
       int leftAmount = returnAmount.value() - outAmount;
 
       // 残額が貨幣の金額以下の場合は出金できない
-      if (leftAmount < yenCurrency.value()) {
+      if (leftAmount < cashStock.yenCurrency().value()) {
         continue;
       }
 
-      // 貨幣ごとの合計保持金額
-      var quantity = cashQuantityMap.get( yenCurrency );
-      int cashAmount = yenCurrency.value() * quantity.value();
-
       // 貨幣ごとの取り出し枚数を算出
       CashQuantity outQuantity;
-      if (leftAmount >= cashAmount) {
-        outQuantity = new CashQuantity( quantity.value() );
+      if (leftAmount >= cashStock.cashSum().value()) {
+        outQuantity = new CashQuantity( cashStock.cashQuantity().value() );
       } else {
-        outQuantity = new CashQuantity( leftAmount / yenCurrency.value() );
+        outQuantity = new CashQuantity( leftAmount / cashStock.yenCurrency().value() );
       }
 
       // 入出金記録を作成
-      CashInout out = CashInoutFactory.newOut( yenCurrency, outQuantity );
-      this.cashInoutList.add( out );
+      var cashOut = CashInoutFactory.newOut( cashStock.yenCurrency(), outQuantity );
+      this.cashInoutList.add( cashOut );
 
       // 出金残額に反映
-      outAmount += yenCurrency.value() * outQuantity.value();
+      outAmount += cashStock.yenCurrency().value() * outQuantity.value();
     }
 
     // 出金しきれない場合は異常終了
@@ -131,11 +126,11 @@ public class CashStock {
       throw new RuntimeException( "Illegal ReturnAmount." );
     }
 
-    // 保有残高の再計算
-    this.cashTotalAmount = new CashTotalAmount( this.cashInoutList );
-
     // 保有枚数の再計算
     countCashQuantity();
+
+    // 保有残高の再計算
+    this.cashTotalAmount = new CashTotalAmount( this.cashStockList );
   }
 
   /**

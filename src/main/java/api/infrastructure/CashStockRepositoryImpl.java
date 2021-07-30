@@ -1,7 +1,7 @@
 package api.infrastructure;
 
 import api.application.repository.CashStockRepository;
-import api.domain.model.cash.CashStock;
+import api.domain.model.cash.CashStocks;
 import api.domain.model.cash.inout.CashInoutFactory;
 import api.infrastructure.entity.CashInoutEntity;
 import api.infrastructure.jparepository.CashInoutJpaRepository;
@@ -19,7 +19,7 @@ public class CashStockRepositoryImpl implements CashStockRepository {
   }
 
   @Override
-  public CashStock fetch() {
+  public CashStocks fetch() {
     var result = cashInoutJpaRepository.findAll();
     var cashInoutList = result.stream().map( cashInoutEntity ->
         CashInoutFactory.restore(
@@ -31,12 +31,12 @@ public class CashStockRepositoryImpl implements CashStockRepository {
         )
     ).collect( Collectors.toList() );
 
-    return new CashStock( cashInoutList );
+    return new CashStocks( cashInoutList );
   }
 
   @Override
-  public void store(CashStock cashStock) {
-    var cashInoutList = cashStock.cashInoutList();
+  public void store(CashStocks cashStocks) {
+    var cashInoutList = cashStocks.cashInoutList();
     var cashInoutEntityList = cashInoutList.stream().map( cashInout ->
         new CashInoutEntity(
             cashInout.cashInoutId().value(),

@@ -1,7 +1,7 @@
 package api.domain.model.cash.inout;
 
 import api.domain.model.common.YenCurrency;
-import api.domain.model.cash.CashQuantity;
+import api.domain.model.cash.stock.CashQuantity;
 
 import java.time.LocalDateTime;
 
