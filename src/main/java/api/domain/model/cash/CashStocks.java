@@ -20,10 +20,6 @@ public class CashStocks {
 
   // 入出金記録一覧
   private final List<CashInout> cashInoutList;
-  // 保有する貨幣一覧
-  private List<CashStock> cashStockList;
-  // 保有する合計金額
-  private CashTotalAmount cashTotalAmount;
 
   /**
    * コンストラクタ
@@ -35,23 +31,17 @@ public class CashStocks {
       throw new IllegalArgumentException( "CashInoutList Not Permit Null." );
     }
     this.cashInoutList = cashInoutList;
-
-    // 保有枚数の計算
-    countCashQuantity();
-
-    // 保有残高の計算
-    this.cashTotalAmount = new CashTotalAmount( this.cashStockList );
   }
 
   /**
    * 保持している現金の枚数を数える.
    */
-  private void countCashQuantity() {
-    this.cashStockList = new ArrayList<>();
+  private List<CashStock> cashStockList() {
+    List<CashStock> cashStockList = new ArrayList<>();
 
     // 入出金がない場合は何もしない
     if (this.cashInoutList.size() == 0) {
-      return;
+      return cashStockList;
     }
 
     var currencyList = YenCurrency.values();
@@ -60,6 +50,8 @@ public class CashStocks {
       CashStock cashStockByCurrency = new CashStock( yenCurrency, cashInoutByCurrency );
       cashStockList.add( cashStockByCurrency );
     }
+
+    return cashStockList;
   }
 
   /**
@@ -70,12 +62,6 @@ public class CashStocks {
   public void inCash(YenCurrency paymentYenCurrency) {
     var paymentCashInout = CashInoutFactory.newIn( paymentYenCurrency );
     cashInoutList.add( paymentCashInout );
-
-    // 保有枚数の再計算
-    countCashQuantity();
-
-    // 保有残高の計算
-    this.cashTotalAmount = new CashTotalAmount( this.cashStockList );
   }
 
   /**
@@ -91,7 +77,7 @@ public class CashStocks {
     Collections.reverse( yenCurrencyList );
 
     // 金額が大きい順にソート
-    var sortedCashStockListByCurrencyDesc = this.cashStockList.stream().sorted(
+    var sortedCashStockListByCurrencyDesc = cashStockList().stream().sorted(
         (s1, s2) -> s2.yenCurrency().value() - s1.yenCurrency().value() ).collect( Collectors.toList() );
 
     // 出金済金額
@@ -125,12 +111,6 @@ public class CashStocks {
     if (returnAmount.value() - outAmount != 0) {
       throw new RuntimeException( "Illegal ReturnAmount." );
     }
-
-    // 保有枚数の再計算
-    countCashQuantity();
-
-    // 保有残高の再計算
-    this.cashTotalAmount = new CashTotalAmount( this.cashStockList );
   }
 
   /**
@@ -144,6 +124,6 @@ public class CashStocks {
    * @return 保持している現金の合計残高
    */
   public CashTotalAmount cashTotalAmount() {
-    return this.cashTotalAmount;
+    return new CashTotalAmount( cashStockList() );
   }
 }
