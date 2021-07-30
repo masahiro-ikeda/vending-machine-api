@@ -1,4 +1,4 @@
-package api.domain.model;
+package api.domain.model.common;
 
 import api.domain.model.payments.payment.PaymentAmount;
 

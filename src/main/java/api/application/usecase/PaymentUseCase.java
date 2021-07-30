@@ -2,7 +2,7 @@ package api.application.usecase;
 
 import api.application.repository.CashStockRepository;
 import api.application.repository.PaymentRepository;
-import api.domain.model.YenCurrency;
+import api.domain.model.common.YenCurrency;
 import api.domain.model.payments.PaymentTotalAmount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

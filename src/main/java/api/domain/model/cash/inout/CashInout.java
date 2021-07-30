@@ -1,6 +1,6 @@
 package api.domain.model.cash.inout;
 
-import api.domain.model.YenCurrency;
+import api.domain.model.common.YenCurrency;
 
 import java.time.LocalDateTime;
 

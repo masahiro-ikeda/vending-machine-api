@@ -1,6 +1,6 @@
 package api.domain.model.cash;
 
-import api.domain.model.YenCurrency;
+import api.domain.model.common.YenCurrency;
 import api.domain.model.cash.inout.CashInout;
 import api.domain.model.cash.inout.CashInoutFactory;
 import api.domain.model.cash.inout.CashInoutType;

@@ -1,6 +1,6 @@
 package api.domain.model.payments.payment;
 
-import api.domain.model.YenCurrency;
+import api.domain.model.common.YenCurrency;
 import api.domain.model.drink.DrinkPrice;
 import api.domain.model.payments.PaymentTotalAmount;
 
