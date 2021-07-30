@@ -1,17 +1,9 @@
 package api.application.repository;
 
-import java.util.List;
 import api.domain.model.drink.Drink;
-import api.infrastructure.inmemory.DrinkData;
+import api.domain.model.drink.DrinkId;
 
 public interface DrinkRepository {
-
-  /**
-   * 全てのドリンクを取得.
-   *
-   * @return 全ドリンク
-   */
-  List<DrinkData> fetch();
 
   /**
    * ドリンク情報を取得.
@@ -19,5 +11,12 @@ public interface DrinkRepository {
    * @param drinkId ドリンクID
    * @return ドリンク
    */
-  Drink fetchById(int drinkId);
+  Drink fetchById(DrinkId drinkId);
+
+  /**
+   * 入出庫の更新.
+   *
+   * @param drink ドリンク集約
+   */
+  void store(Drink drink);
 }

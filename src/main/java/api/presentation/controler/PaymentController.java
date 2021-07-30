@@ -1,18 +1,20 @@
 package api.presentation.controler;
 
-import api.application.PaymentUseCase;
-import api.application.RepaymentUseCase;
+import api.application.usecase.PaymentUseCase;
+import api.application.usecase.RepaymentUseCase;
+import api.domain.model.payments.PaymentTotalAmount;
 import api.presentation.controler.form.PaymentForm;
-import api.presentation.viewmodel.RepaymentViewModel;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 支払いコントローラー.
+ * 支払コントローラー.
  */
 @RestController
+@RequestMapping("api")
 public class PaymentController {
 
   private final PaymentUseCase paymentUseCase;
@@ -23,14 +25,23 @@ public class PaymentController {
     this.repaymentUseCase = repaymentUseCase;
   }
 
+  /**
+   * 支払.
+   *
+   * @param form
+   * @return 支払い済みの金額
+   */
   @PostMapping("pay")
   public int pay(@Validated @RequestBody PaymentForm form) {
-    return paymentUseCase.pay( form.getAmount() );
+    PaymentTotalAmount paymentTotalAmount = paymentUseCase.pay( form.getAmount() );
+    return paymentTotalAmount.value();
   }
 
+  /**
+   * 返金.
+   */
   @PostMapping("repay")
-  public RepaymentViewModel repay() {
-    return repaymentUseCase.repay();
+  public void repay() {
+    repaymentUseCase.repay();
   }
-
 }

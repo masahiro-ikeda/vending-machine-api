@@ -1,36 +1,85 @@
 package api.domain.model.drink;
 
-import api.domain.model.payment.PaymentAmount;
-import api.domain.valueobject.Price;
-import api.domain.valueobject.Quantity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import api.domain.model.drink.inout.DrinkInout;
+import api.domain.model.drink.inout.DrinkInoutId;
+import api.domain.model.drink.inout.DrinkInoutQuantity;
+import api.domain.model.drink.inout.DrinkInoutType;
 
-@AllArgsConstructor
-@Getter
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class Drink {
-  private final int drinkId;
-  private final Price drinkPrice;
-  private final Quantity drinkQuantity;
+  private final DrinkId drinkId;
+  private final DrinkPrice drinkPrice;
+  private DrinkQuantity drinkQuantity;
+  private final List<DrinkInout> drinkInoutList;
 
   /**
-   * 購入可能か？
+   * コンストラクタ.
    *
-   * @param paymentAmount 支払金額
-   * @return 購入可能な場合true
+   * @param drinkId
+   * @param drinkPrice
+   * @param drinkInoutList
    */
-  public boolean canPurchase(PaymentAmount paymentAmount, Quantity orderQuantity) {
+  public Drink(DrinkId drinkId, DrinkPrice drinkPrice, List<DrinkInout> drinkInoutList) {
+    this.drinkId = drinkId;
+    this.drinkPrice = drinkPrice;
+    this.drinkInoutList = drinkInoutList;
+    this.drinkQuantity = new DrinkQuantity( this.drinkInoutList );
+  }
 
-    // 価格チェック
-    if (paymentAmount.value() < drinkPrice.value()) {
-      return false;
-    }
+  /**
+   * 出庫
+   *
+   * @param outQuantity
+   */
+  public void out(DrinkQuantity outQuantity) {
+    DrinkInout drinkOut = new DrinkInout(
+        new DrinkInoutId(),
+        this.drinkId,
+        DrinkInoutType.OUT,
+        new DrinkInoutQuantity( outQuantity.value() ),
+        LocalDateTime.now()
+    );
+    drinkInoutList.add( drinkOut );
 
-    // 在庫チェック
-    if (!drinkQuantity.canShip( orderQuantity )) {
-      return false;
-    }
+    // 在庫数の再計算
+    this.drinkQuantity = new DrinkQuantity( this.drinkInoutList );
+  }
 
-    return true;
+  /**
+   * ドリンクID.
+   *
+   * @return
+   */
+  public DrinkId drinkId() {
+    return this.drinkId;
+  }
+
+  /**
+   * ドリンクの数量.
+   *
+   * @return
+   */
+  public DrinkQuantity drinkQuantity() {
+    return this.drinkQuantity;
+  }
+
+  /**
+   * ドリンクの価格.
+   *
+   * @return
+   */
+  public DrinkPrice drinkPrice() {
+    return this.drinkPrice;
+  }
+
+  /**
+   * ドリンクの入出庫リスト.
+   *
+   * @return
+   */
+  public List<DrinkInout> drinkInoutList() {
+    return drinkInoutList;
   }
 }

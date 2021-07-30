@@ -8,5 +8,5 @@ import javax.validation.constraints.NotNull;
 public class PurchaseForm {
 
   @NotNull
-  private int drinkId;
+  private String drinkId;
 }
