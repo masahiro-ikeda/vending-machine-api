@@ -24,7 +24,7 @@ public class CashStockRepositoryImpl implements CashStockRepository {
     var cashInoutList = result.stream().map( cashInoutEntity ->
         CashInoutFactory.restore(
             cashInoutEntity.getCashInoutId(),
-            cashInoutEntity.getCashAmount(),
+            cashInoutEntity.getCashCurrency(),
             cashInoutEntity.getCashInoutType(),
             cashInoutEntity.getCashInoutQuantity(),
             cashInoutEntity.getCashInoutAt()

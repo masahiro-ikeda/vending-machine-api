@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class CashInoutEntity {
   @Id
   private String cashInoutId;
-  private int cashAmount;
+  private int cashCurrency;
   private String cashInoutType;
   private int cashInoutQuantity;
   private LocalDateTime cashInoutAt;

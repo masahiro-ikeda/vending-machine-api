@@ -1,0 +1,53 @@
+@startuml
+
+entity PAYMENT {
+    PAYMENT_ID
+    PAYMENT_AMOUNT
+    PAYMENT_TYPE
+    PAYMENT_AT
+    --
+    支払記録
+}
+
+entity CASH_INOUT {
+    CASH_INOUT_ID
+    CASH_CURRENCY
+    CASH_INOUT_TYPE
+    CASH_INOUT_QUANTITY
+    CASH_INOUT_AT
+    --
+    現金入出金
+}
+
+entity DRINK {
+    DRINK_ID
+    DRINK_NAME
+    DRINK_PRICE
+    --
+    ドリンクマスタ
+}
+
+entity DRINK_INOUT {
+    DRINK_INOUT_ID
+    DRINK_ID
+    DRINK_INOUT_TYPE
+    DRINK_INOUT_QUANTITY
+    DRINK_INOUT_AT
+    --
+    ドリンク入出庫
+}
+
+entity DRINK_SOLD {
+    SOLD_ID
+    DRINK_ID
+    DRINK_INOUT_ID
+    SOLD_QUANTITY
+    SOLD_AT
+    --
+    ドリンク販売
+}
+
+DRINK -{ DRINK_INOUT
+DRINK -{ DRINK_SOLD
+
+@enduml
