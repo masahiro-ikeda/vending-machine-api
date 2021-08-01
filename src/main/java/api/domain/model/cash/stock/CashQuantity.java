@@ -17,7 +17,7 @@ public class CashQuantity {
    *
    * @param cashInoutList 貨幣入出金一覧
    */
-  public CashQuantity(List<CashInout> cashInoutList) {
+  CashQuantity(List<CashInout> cashInoutList) {
 
     // Nullチェック
     if (cashInoutList == null) {

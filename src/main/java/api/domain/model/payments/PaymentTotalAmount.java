@@ -6,6 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 支払済み金額.
+ */
 public class PaymentTotalAmount {
 
   private final int paymentTotalAmount;
@@ -15,7 +18,7 @@ public class PaymentTotalAmount {
    *
    * @param paymentList 支払記録
    */
-  public PaymentTotalAmount(List<Payment> paymentList) {
+  PaymentTotalAmount(List<Payment> paymentList) {
 
     if (paymentList == null) {
       throw new IllegalArgumentException( "Cannot Sum Cause Payment Being Null." );

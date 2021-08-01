@@ -16,7 +16,7 @@ public class CashSum {
    *
    * @param cashInoutList 入出金記録
    */
-  public CashSum(List<CashInout> cashInoutList) {
+  CashSum(List<CashInout> cashInoutList) {
 
     if (cashInoutList == null) {
       throw new IllegalArgumentException( "Cannot Sum Cause CashInout Being Null." );

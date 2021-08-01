@@ -8,7 +8,7 @@ public class PaymentId {
   /**
    * 新規生成.
    */
-  public PaymentId() {
+  PaymentId() {
     this.paymentId = UUID.randomUUID();
   }
 

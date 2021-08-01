@@ -8,7 +8,7 @@ public class CashInoutId {
   /**
    * 新規生成.
    */
-  public CashInoutId() {
+  CashInoutId() {
     this.cashInoutId = UUID.randomUUID();
   }
 
