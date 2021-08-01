@@ -40,7 +40,6 @@ entity DRINK_INOUT {
 entity DRINK_SOLD {
     SOLD_ID
     DRINK_ID
-    DRINK_INOUT_ID
     SOLD_QUANTITY
     SOLD_AT
     --
