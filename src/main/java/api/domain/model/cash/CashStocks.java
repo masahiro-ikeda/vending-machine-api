@@ -107,9 +107,9 @@ public class CashStocks {
       outAmount += cashStock.yenCurrency().value() * outQuantity.value();
     }
 
-    // 出金しきれない場合は異常終了
-    if (returnAmount.value() - outAmount != 0) {
-      throw new RuntimeException( "Illegal ReturnAmount." );
+    // 出金しきれるかチェック
+    if (returnAmount.value() - outAmount > 0) {
+      throw new RuntimeException( "Cannot Out Cash Cause Not Enough Cash." );
     }
   }
 
