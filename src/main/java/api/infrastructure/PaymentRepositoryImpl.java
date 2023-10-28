@@ -1,10 +1,8 @@
 package api.infrastructure;
 
-import api.application.repository.PaymentRepository;
-import api.domain.model.payments.Payments;
-import api.domain.model.payments.payment.Payment;
-import api.domain.model.payments.payment.PaymentFactory;
-import api.infrastructure.entity.PaymentEntity;
+import api.domain.payments.PaymentRepository;
+import api.domain.payments.Payment;
+import api.domain.payments.Payments;
 import api.infrastructure.jparepository.PaymentJpaRepository;
 import org.springframework.stereotype.Component;
 
@@ -22,29 +20,19 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
   @Override
   public void store(Payments payments) {
-    List<Payment> paymentList = payments.paymentList();
-    List<PaymentEntity> paymentEntities = paymentList.stream().map( payment ->
-        new PaymentEntity(
-            payment.paymentId().value(),
-            payment.paymentAmount().value(),
-            payment.paymentType().name(),
-            payment.paymentAt()
-        )
-    ).collect( Collectors.toList() );
-    paymentJpaRepository.saveAll( paymentEntities );
+    List<PaymentDto> dtos = payments.payments().stream().map(PaymentDto::new).collect(Collectors.toList());
+    paymentJpaRepository.saveAll(dtos);
+  }
+
+  @Override
+  public void add(Payment payment) {
+    paymentJpaRepository.save(new PaymentDto(payment));
   }
 
   @Override
   public Payments fetch() {
-    List<PaymentEntity> result = paymentJpaRepository.findAll();
-    List<Payment> paymentList = result.stream().map( paymentEntity ->
-        PaymentFactory.restore(
-            paymentEntity.getPaymentId(),
-            paymentEntity.getPaymentAmount(),
-            paymentEntity.getPaymentType(),
-            paymentEntity.getPaymentAt()
-        )
-    ).collect( Collectors.toList() );
-    return new Payments( paymentList );
+    List<PaymentDto> dtos = paymentJpaRepository.findAll();
+    List<Payment> payments = dtos.stream().map(PaymentDto::toEntity).collect(Collectors.toList());
+    return new Payments(payments);
   }
 }

@@ -1,9 +1,9 @@
 package api.infrastructure.jparepository;
 
-import api.infrastructure.CashInoutDto;
+import api.infrastructure.SaleDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CashInoutJpaRepository extends JpaRepository<CashInoutDto, String> {
+public interface SaleJpaRepository extends JpaRepository<SaleDto, String> {
 }

@@ -1,14 +1,7 @@
 package api.infrastructure;
 
-import api.application.repository.DrinkRepository;
-import api.domain.model.drink.Drink;
-import api.domain.model.drink.DrinkId;
-import api.domain.model.drink.DrinkPrice;
-import api.domain.model.drink.inout.DrinkInout;
-import api.domain.model.drink.inout.DrinkInoutId;
-import api.domain.model.drink.inout.DrinkInoutQuantity;
-import api.domain.model.drink.inout.DrinkInoutType;
-import api.infrastructure.entity.DrinkInoutEntity;
+import api.domain.drink.DrinkRepository;
+import api.domain.drink.Drink;
 import api.infrastructure.jparepository.DrinkInoutJpaRepository;
 import api.infrastructure.jparepository.DrinkJpaRepository;
 import org.springframework.stereotype.Component;
@@ -27,41 +20,15 @@ public class DrinkRepositoryImpl implements DrinkRepository {
   }
 
   @Override
-  public Drink fetchById(DrinkId drinkId) {
-
-    var drinkEntity = drinkJpaRepository.getById( drinkId.value() );
-    var drinkInoutEntityList = drinkInoutJpaRepository.findByDrinkId( drinkId.value() );
-
-    var drinkInoutList = drinkInoutEntityList.stream().map( drinkInoutEntity ->
-        new DrinkInout(
-            new DrinkInoutId( drinkInoutEntity.getDrinkInoutId() ),
-            new DrinkId( drinkInoutEntity.getDrinkId() ),
-            DrinkInoutType.valueOf( drinkInoutEntity.getDrinkInoutType() ),
-            new DrinkInoutQuantity( drinkInoutEntity.getDrinkInoutQuantity() ),
-            drinkInoutEntity.getDrinkInoutAt()
-        )
-    ).collect( Collectors.toList() );
-
-    return new Drink(
-        new DrinkId( drinkEntity.getDrinkId() ),
-        new DrinkPrice( drinkEntity.getDrinkPrice() ),
-        drinkInoutList
-    );
+  public Drink fetchById(String drinkId) {
+    var drinkDto = drinkJpaRepository.getById(drinkId);
+    var drinkInoutDtos = drinkInoutJpaRepository.findByDrinkId(drinkId);
+    return drinkDto.toEntity(drinkInoutDtos);
   }
 
   @Override
   public void store(Drink drink) {
-
-    var drinkInoutList = drink.drinkInoutList();
-    var drinkInoutEntityList = drinkInoutList.stream().map( drinkInout ->
-        new DrinkInoutEntity(
-            drinkInout.drinkInoutId().value(),
-            drinkInout.drinkId().value(),
-            drinkInout.drinkInoutType().name(),
-            drinkInout.drinkInoutQuantity().value(),
-            drinkInout.drinkInoutAt()
-        ) ).collect( Collectors.toList() );
-
-    drinkInoutJpaRepository.saveAll( drinkInoutEntityList );
+    var drinkInoutDtos = drink.drinkInoutList().stream().map(DrinkInoutDto::new).collect(Collectors.toList());
+    drinkInoutJpaRepository.saveAll(drinkInoutDtos);
   }
 }

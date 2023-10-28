@@ -1,9 +1,7 @@
 package api.infrastructure;
 
-import api.application.repository.CashStockRepository;
-import api.domain.model.cash.CashStocks;
-import api.domain.model.cash.inout.CashInoutFactory;
-import api.infrastructure.entity.CashInoutEntity;
+import api.domain.cash.CashStockRepository;
+import api.domain.cash.CashStocks;
 import api.infrastructure.jparepository.CashInoutJpaRepository;
 import org.springframework.stereotype.Component;
 
@@ -20,31 +18,14 @@ public class CashStockRepositoryImpl implements CashStockRepository {
 
   @Override
   public CashStocks fetch() {
-    var result = cashInoutJpaRepository.findAll();
-    var cashInoutList = result.stream().map( cashInoutEntity ->
-        CashInoutFactory.restore(
-            cashInoutEntity.getCashInoutId(),
-            cashInoutEntity.getCashCurrency(),
-            cashInoutEntity.getCashInoutType(),
-            cashInoutEntity.getCashInoutQuantity(),
-            cashInoutEntity.getCashInoutAt()
-        )
-    ).collect( Collectors.toList() );
-
-    return new CashStocks( cashInoutList );
+    var dtos = cashInoutJpaRepository.findAll();
+    var cashInoutList = dtos.stream().map(CashInoutDto::toEntity).collect(Collectors.toList());
+    return new CashStocks(cashInoutList);
   }
 
   @Override
   public void store(CashStocks cashStocks) {
-    var cashInoutList = cashStocks.cashInoutList();
-    var cashInoutEntityList = cashInoutList.stream().map( cashInout ->
-        new CashInoutEntity(
-            cashInout.cashInoutId().value(),
-            cashInout.yenCurrency().value(),
-            cashInout.cashInoutType().name(),
-            cashInout.cashInoutQuantity().value(),
-            cashInout.cashInoutAt()
-        ) ).collect( Collectors.toList() );
-    cashInoutJpaRepository.saveAll( cashInoutEntityList );
+    var dtos = cashStocks.cashInoutList().stream().map(CashInoutDto::new).collect(Collectors.toList());
+    cashInoutJpaRepository.saveAll(dtos);
   }
 }
