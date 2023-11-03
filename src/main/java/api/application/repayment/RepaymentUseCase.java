@@ -1,7 +1,7 @@
 package api.application.repayment;
 
 import api.domain.cash.CashStockRepository;
-import api.domain.payments.PaymentRepository;
+import api.domain.payment.PaymentRepository;
 import api.domain.cash.CashStocks;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class RepaymentUseCase {
 
     // 返金
     var payments = paymentRepository.fetch();
-    int repaymentAmount = payments.totalPaymentAmount(); // 返金金額
+    int repaymentAmount = payments.totalAmount(); // 返金金額
     payments.repay();
     paymentRepository.store(payments);
 

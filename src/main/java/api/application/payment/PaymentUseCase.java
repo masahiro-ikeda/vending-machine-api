@@ -1,7 +1,7 @@
 package api.application.payment;
 
 import api.domain.cash.CashStockRepository;
-import api.domain.payments.PaymentRepository;
+import api.domain.payment.PaymentRepository;
 import api.domain.YenCurrency;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +35,10 @@ public class PaymentUseCase {
 
     // 現金残高に反映
     var cashStock = cashStockRepository.fetch();
-    cashStock.inCash(paymentCurrency);
+    cashStock.in(paymentCurrency);
     cashStockRepository.store(cashStock);
 
-    int totalPaymentAmount = payments.totalPaymentAmount();
+    int totalPaymentAmount = payments.totalAmount();
     return new PaymentOutput(totalPaymentAmount);
   }
 }

@@ -1,4 +1,4 @@
-package api.domain.payments;
+package api.domain.payment;
 
 import java.time.LocalDateTime;
 

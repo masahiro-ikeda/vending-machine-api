@@ -1,4 +1,4 @@
-package api.infrastructure;
+package api.infrastructure.sale;
 
 import api.domain.sale.Sale;
 import lombok.NoArgsConstructor;

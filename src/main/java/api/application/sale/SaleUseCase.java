@@ -1,10 +1,10 @@
 package api.application.sale;
 
 import api.domain.drink.DrinkRepository;
-import api.domain.payments.PaymentRepository;
+import api.domain.payment.PaymentRepository;
 import api.domain.sale.SaleRepository;
 import api.domain.drink.Drink;
-import api.domain.payments.Payments;
+import api.domain.payment.Payments;
 import api.domain.sale.Sale;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +38,7 @@ public class SaleUseCase {
     int saleQuantity = 1;
 
     // 販売可能かチェックする
-    drink.validateCanSale(saleQuantity, payments.totalPaymentAmount());
+    drink.validateOnSale(saleQuantity, payments.totalAmount());
 
     // 販売記録の作成
     Sale sale = new Sale(drink.drinkId(), saleQuantity);
@@ -52,6 +52,6 @@ public class SaleUseCase {
     payments.sale(drink.drinkPrice());
     paymentRepository.store(payments);
 
-    return new SaleOutput(payments.totalPaymentAmount());
+    return new SaleOutput(payments.totalAmount());
   }
 }

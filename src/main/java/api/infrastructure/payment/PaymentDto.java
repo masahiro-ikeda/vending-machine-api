@@ -1,7 +1,7 @@
-package api.infrastructure;
+package api.infrastructure.payment;
 
-import api.domain.payments.Payment;
-import api.domain.payments.PaymentType;
+import api.domain.payment.Payment;
+import api.domain.payment.PaymentType;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;

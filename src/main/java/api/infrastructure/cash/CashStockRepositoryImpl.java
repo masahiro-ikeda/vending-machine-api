@@ -1,8 +1,9 @@
-package api.infrastructure;
+package api.infrastructure.cash;
 
 import api.domain.cash.CashStockRepository;
 import api.domain.cash.CashStocks;
-import api.infrastructure.jparepository.CashInoutJpaRepository;
+import api.infrastructure.cash.CashInoutDto;
+import api.infrastructure.cash.CashInoutJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

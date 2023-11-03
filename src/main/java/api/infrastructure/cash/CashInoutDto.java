@@ -1,4 +1,4 @@
-package api.infrastructure;
+package api.infrastructure.cash;
 
 import api.domain.cash.inout.CashInout;
 import api.domain.cash.inout.CashInoutType;

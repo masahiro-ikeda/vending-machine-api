@@ -52,7 +52,7 @@ public class CashStocks {
   /**
    * 入金.
    */
-  public void inCash(YenCurrency paymentYenCurrency) {
+  public void in(YenCurrency paymentYenCurrency) {
     CashInout cashIn = new CashInout(
         UUID.randomUUID().toString(),
         paymentYenCurrency,
@@ -65,7 +65,7 @@ public class CashStocks {
   /**
    * 出金.
    */
-  public void outCash(YenCurrency paymentYenCurrency, int cashQuantity) {
+  public void out(YenCurrency paymentYenCurrency, int cashQuantity) {
     CashInout cashOut = new CashInout(
         UUID.randomUUID().toString(),
         paymentYenCurrency,
@@ -100,14 +100,14 @@ public class CashStocks {
 
       // 貨幣ごとの取り出し枚数を計算
       int outQuantity = 0;
-      if (leftAmount >= cashStock.cashSum()) {
+      if (leftAmount >= cashStock.sum()) {
         outQuantity += cashStock.cashQuantity();
       } else {
         outQuantity = leftAmount / cashStock.yenCurrency().value();
       }
 
       // 入出金記録を作成
-      outCash(cashStock.yenCurrency(), outQuantity);
+      out(cashStock.yenCurrency(), outQuantity);
       // 出金済金額に反映
       outAmount += cashStock.yenCurrency().value() * outQuantity;
 
@@ -139,6 +139,6 @@ public class CashStocks {
       return 0;
     }
 
-    return cashStockList().stream().mapToInt(cashStock -> cashStock.cashSum()).sum();
+    return cashStockList().stream().mapToInt(cashStock -> cashStock.sum()).sum();
   }
 }

@@ -43,7 +43,7 @@ public class CashStock {
     return cashQuantity;
   }
 
-  public int cashSum() {
+  public int sum() {
     return yenCurrency.value() * cashQuantity;
   }
 }

@@ -24,7 +24,7 @@ public class Drink {
   /**
    * 購入可能かチェック.
    */
-  public void validateCanSale(int saleQuantity, int totalPaymentAmount) {
+  public void validateOnSale(int saleQuantity, int totalPaymentAmount) {
 
     // 購入可能な在庫はあるか？
     if (saleQuantity > drinkQuantity()) {

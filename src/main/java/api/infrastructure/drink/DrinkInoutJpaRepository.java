@@ -1,6 +1,5 @@
-package api.infrastructure.jparepository;
+package api.infrastructure.drink;
 
-import api.infrastructure.DrinkInoutDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

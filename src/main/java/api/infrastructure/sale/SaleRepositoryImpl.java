@@ -1,8 +1,9 @@
-package api.infrastructure;
+package api.infrastructure.sale;
 
 import api.domain.sale.SaleRepository;
 import api.domain.sale.Sale;
-import api.infrastructure.jparepository.SaleJpaRepository;
+import api.infrastructure.sale.SaleDto;
+import api.infrastructure.sale.SaleJpaRepository;
 import org.springframework.stereotype.Component;
 
 @Component

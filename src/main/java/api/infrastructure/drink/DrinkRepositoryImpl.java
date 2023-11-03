@@ -1,9 +1,10 @@
-package api.infrastructure;
+package api.infrastructure.drink;
 
 import api.domain.drink.DrinkRepository;
 import api.domain.drink.Drink;
-import api.infrastructure.jparepository.DrinkInoutJpaRepository;
-import api.infrastructure.jparepository.DrinkJpaRepository;
+import api.infrastructure.drink.DrinkInoutDto;
+import api.infrastructure.drink.DrinkInoutJpaRepository;
+import api.infrastructure.drink.DrinkJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

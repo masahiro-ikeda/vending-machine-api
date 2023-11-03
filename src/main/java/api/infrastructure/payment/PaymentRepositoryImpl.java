@@ -1,9 +1,10 @@
-package api.infrastructure;
+package api.infrastructure.payment;
 
-import api.domain.payments.PaymentRepository;
-import api.domain.payments.Payment;
-import api.domain.payments.Payments;
-import api.infrastructure.jparepository.PaymentJpaRepository;
+import api.domain.payment.PaymentRepository;
+import api.domain.payment.Payment;
+import api.domain.payment.Payments;
+import api.infrastructure.payment.PaymentDto;
+import api.infrastructure.payment.PaymentJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,11 +23,6 @@ public class PaymentRepositoryImpl implements PaymentRepository {
   public void store(Payments payments) {
     List<PaymentDto> dtos = payments.payments().stream().map(PaymentDto::new).collect(Collectors.toList());
     paymentJpaRepository.saveAll(dtos);
-  }
-
-  @Override
-  public void add(Payment payment) {
-    paymentJpaRepository.save(new PaymentDto(payment));
   }
 
   @Override

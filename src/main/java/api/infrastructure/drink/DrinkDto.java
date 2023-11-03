@@ -1,4 +1,4 @@
-package api.infrastructure;
+package api.infrastructure.drink;
 
 import api.domain.drink.Drink;
 import lombok.NoArgsConstructor;

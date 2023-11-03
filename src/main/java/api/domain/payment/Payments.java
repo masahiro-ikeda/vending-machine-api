@@ -1,4 +1,4 @@
-package api.domain.payments;
+package api.domain.payment;
 
 import api.domain.YenCurrency;
 
@@ -54,7 +54,7 @@ public class Payments {
   public void repay() {
     Payment payment = new Payment(
         UUID.randomUUID().toString(),
-        totalPaymentAmount(),
+        totalAmount(),
         PaymentType.REPAY,
         LocalDateTime.now()
     );
@@ -62,9 +62,9 @@ public class Payments {
   }
 
   /**
-   * @return PaymentTotalAmount 支払金額合計
+   * @return 支払金額合計
    */
-  public int totalPaymentAmount() {
+  public int totalAmount() {
     var sorted = payments.stream().sorted(Comparator.comparing(Payment::paymentAt)).collect(Collectors.toList());
     int total = 0;
     for (Payment payment : sorted) {

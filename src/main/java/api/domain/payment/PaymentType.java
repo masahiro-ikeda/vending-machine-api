@@ -1,4 +1,4 @@
-package api.domain.payments;
+package api.domain.payment;
 
 /**
  * 支払い種別.
