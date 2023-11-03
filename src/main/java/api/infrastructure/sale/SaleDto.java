@@ -20,6 +20,8 @@ public class SaleDto {
   private String saleId;
   private String drinkId;
   private int saleQuantity;
+  private String paymentId;
+  private String drinkInoutId;
   private LocalDateTime soldAt;
 
   /**
@@ -29,6 +31,8 @@ public class SaleDto {
     this.saleId = sale.saleId();
     this.drinkId = sale.drinkId();
     this.saleQuantity = sale.saleQuantity();
+    this.paymentId = sale.paymentId();
+    this.drinkInoutId = sale.drinkInoutId();
     this.soldAt = sale.soldAt();
   }
 }

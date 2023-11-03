@@ -39,15 +39,17 @@ public class Drink {
   /**
    * 出庫.
    */
-  public void out(int outQuantity) {
+  public String out(int outQuantity) {
+    String drinkInoutId = UUID.randomUUID().toString();
     DrinkInout drinkOut = new DrinkInout(
-        UUID.randomUUID().toString(),
+        drinkInoutId,
         drinkId,
         DrinkInoutType.OUT,
         outQuantity,
         LocalDateTime.now()
     );
     drinkInoutList.add(drinkOut);
+    return drinkInoutId;
   }
 
   /**

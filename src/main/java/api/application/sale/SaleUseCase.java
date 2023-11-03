@@ -40,17 +40,17 @@ public class SaleUseCase {
     // 販売可能かチェックする
     drink.validateOnSale(saleQuantity, payments.totalAmount());
 
-    // 販売記録の作成
-    Sale sale = new Sale(drink.drinkId(), saleQuantity);
-    saleRepository.store(sale);
-
     // ドリンク出庫記録に反映
-    drink.out(saleQuantity);
+    String drinkInoutId = drink.out(saleQuantity);
     drinkRepository.store(drink);
 
     // 支払記録に反映
-    payments.sale(drink.drinkPrice());
+    String paymentId = payments.sale(drink.drinkPrice());
     paymentRepository.store(payments);
+
+    // 販売記録の作成
+    Sale sale = new Sale(drink.drinkId(), saleQuantity, paymentId, drinkInoutId);
+    saleRepository.store(sale);
 
     return new SaleOutput(payments.totalAmount());
   }

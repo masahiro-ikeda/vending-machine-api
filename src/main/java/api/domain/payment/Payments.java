@@ -38,14 +38,16 @@ public class Payments {
   /**
    * 販売.
    */
-  public void sale(int drinkPrice) {
+  public String sale(int drinkPrice) {
+    String paymentId = UUID.randomUUID().toString();
     Payment payment = new Payment(
-        UUID.randomUUID().toString(),
+        paymentId,
         drinkPrice,
         PaymentType.SALE,
         LocalDateTime.now()
     );
     payments.add(payment);
+    return paymentId;
   }
 
   /**
